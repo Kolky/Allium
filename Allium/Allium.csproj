@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E2D5F38E-A68A-41EE-AAF1-AAA1F61A327B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Allium</RootNamespace>
+    <AssemblyName>Allium</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Allium.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Allium.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Allium.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Validation, Version=2.4.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Validation.2.4.15\lib\net45\Validation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnalyticsClient.cs" />
+    <Compile Include="AnalyticsEvent.cs" />
+    <Compile Include="AnalyticsResult.cs" />
+    <Compile Include="AnalyticsSession.cs" />
+    <Compile Include="AnalyticsTiming.cs" />
+    <Compile Include="Enums\HitType.cs" />
+    <Compile Include="Enums\SessionControl.cs" />
+    <Compile Include="Interfaces\IAnalyticsEvent.cs" />
+    <Compile Include="Interfaces\IAnalyticsResult.cs" />
+    <Compile Include="Interfaces\ICloneable.cs" />
+    <Compile Include="Interfaces\Parameters\IAppTrackingParameters.cs" />
+    <Compile Include="Interfaces\Parameters\IContentExperimentsParameters.cs" />
+    <Compile Include="Interfaces\Parameters\IContentInformationParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IEventParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IExceptionParameters.cs" />
+    <Compile Include="Interfaces\Parameters\IHitParameters.cs" />
+    <Compile Include="Interfaces\Parameters\IGeneralParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IPageViewParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IScreenViewParameters.cs" />
+    <Compile Include="Interfaces\Parameters\ISessionParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\ISocialParameters.cs" />
+    <Compile Include="Interfaces\Parameters\ISystemInfoParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\ITimingParameters.cs" />
+    <Compile Include="Interfaces\Parameters\ITrafficSourcesParameters.cs" />
+    <Compile Include="Interfaces\Parameters\IUserParameters.cs" />
+    <Compile Include="Parameters\Attributes\ContainsParametersAttribute.cs" />
+    <Compile Include="Parameters\Attributes\ParameterCollectionAttribute.cs" />
+    <Compile Include="Parameters\AppTrackingParameters.cs" />
+    <Compile Include="Parameters\ContentExperimentsParameters.cs" />
+    <Compile Include="Parameters\ContentInformationParameters.cs" />
+    <Compile Include="Parameters\Hits\EventHitParameters.cs" />
+    <Compile Include="Parameters\GeneralParameters.cs" />
+    <Compile Include="Parameters\Hits\ExceptionHitParameters.cs" />
+    <Compile Include="Parameters\Hits\HitParameters.cs" />
+    <Compile Include="Parameters\Hits\PageViewHitParameters.cs" />
+    <Compile Include="Parameters\Hits\ScreenViewHitParameters.cs" />
+    <Compile Include="Parameters\Hits\SocialHitParameters.cs" />
+    <Compile Include="Parameters\Hits\TimingHitParameters.cs" />
+    <Compile Include="Parameters\Attributes\ParameterAttribute.cs" />
+    <Compile Include="Interfaces\IAnalyticsClient.cs" />
+    <Compile Include="Interfaces\IAnalyticsSession.cs" />
+    <Compile Include="Interfaces\IAnalyticsTiming.cs" />
+    <Compile Include="Parameters\SessionParameters.cs" />
+    <Compile Include="Parameters\SystemInfoParameters.cs" />
+    <Compile Include="Parameters\TrafficSourcesParameters.cs" />
+    <Compile Include="Parameters\UserParameters.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Allium.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
