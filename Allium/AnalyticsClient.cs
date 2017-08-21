@@ -31,13 +31,10 @@ namespace Allium
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalyticsClient"/> class.
         /// </summary>
-        /// <param name="trackingCode">trackingCode</param>
         /// <param name="useHttps">useHttps</param>
         /// <param name="sendToDebugServer">sendToDebugServer</param>
-        public AnalyticsClient(string trackingCode, bool useHttps, bool sendToDebugServer)
+        public AnalyticsClient(bool useHttps, bool sendToDebugServer)
         {
-            Requires.NotNullOrWhiteSpace(trackingCode, nameof(trackingCode));
-
             this.IsSecure = useHttps;
             this.IsDebug = sendToDebugServer;
 
@@ -84,7 +81,7 @@ namespace Allium
 
             try
             {
-                var response = await this.BuildBaseWebClient(this.ConvertParameters(parameters));
+                var response = await this.ExecuteRequest(this.ConvertParameters(parameters));
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     return new AnalyticsResult(true, null);
@@ -158,7 +155,7 @@ namespace Allium
             return parsedParameters;
         }
 
-        private async Task<HttpWebResponse> BuildBaseWebClient(IDictionary<string, string> parameters)
+        private async Task<HttpWebResponse> ExecuteRequest(IDictionary<string, string> parameters)
         {
             try
             {

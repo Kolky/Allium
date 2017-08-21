@@ -30,7 +30,7 @@ namespace Allium
         /// </summary>
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         public AnalyticsSession(string trackingId)
-            : this(trackingId, false, true)
+            : this(trackingId, true, false)
         {
         }
 
@@ -40,7 +40,7 @@ namespace Allium
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
         public AnalyticsSession(string trackingId, bool useHttps)
-            : this(trackingId, false, useHttps)
+            : this(trackingId, useHttps, false)
         {
         }
 
@@ -55,7 +55,22 @@ namespace Allium
             Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
             Requires.Range(trackingId.StartsWith("UA", StringComparison.Ordinal), nameof(trackingId));
 
-            this.Client = new AnalyticsClient(trackingId, useHttps, sendToDebugServer);
+            this.Client = new AnalyticsClient(useHttps, sendToDebugServer);
+            this.Parameters = new GeneralParameters(trackingId);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="client">Analytics client</param>
+        internal AnalyticsSession(string trackingId, IAnalyticsClient client)
+        {
+            Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
+            Requires.Range(trackingId.StartsWith("UA", StringComparison.Ordinal), nameof(trackingId));
+            Requires.NotNull(client, nameof(client));
+
+            this.Client = client;
             this.Parameters = new GeneralParameters(trackingId);
         }
 

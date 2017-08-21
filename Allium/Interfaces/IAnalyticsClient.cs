@@ -20,6 +20,26 @@ namespace Allium.Interfaces
     internal interface IAnalyticsClient
     {
         /// <summary>
+        /// Gets or sets a value indicating whether we are in debug mode.
+        /// </summary>
+        bool IsDebug { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether we are using a secure connection.
+        /// </summary>
+        bool IsSecure { get; set; }
+
+        /// <summary>
+        /// Gets the user agent.
+        /// </summary>
+        string UserAgent { get; }
+
+        /// <summary>
+        /// Gets the beacon url.
+        /// </summary>
+        string BeaconUrl { get; }
+
+        /// <summary>
         /// Send parameters to Google Analytics.
         /// </summary>
         /// <param name="parameters">parameters</param>
