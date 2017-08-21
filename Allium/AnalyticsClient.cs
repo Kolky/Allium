@@ -13,14 +13,13 @@ namespace Allium
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Net;
     using System.Reflection;
     using System.Threading.Tasks;
     using Interfaces;
     using Interfaces.Parameters;
-    using Parameters.Attributes;
+    using Parameters;
     using Validation;
 
     /// <summary>
@@ -35,24 +34,12 @@ namespace Allium
         /// <param name="sendToDebugServer">sendToDebugServer</param>
         public AnalyticsClient(bool useHttps, bool sendToDebugServer)
         {
-            this.IsSecure = useHttps;
-            this.IsDebug = sendToDebugServer;
-
             var assemblyName = Assembly.GetAssembly(typeof(AnalyticsClient)).GetName();
             var appVersion = $"{assemblyName.Version.Major}.{assemblyName.Version.Minor}.{assemblyName.Version.Revision}";
             var platformVersion = $"{Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}.{Environment.OSVersion.Version.Revision}";
             this.UserAgent = $"Allium/{appVersion} ({Environment.OSVersion.Platform}; {platformVersion}; {Environment.OSVersion.VersionString})";
+            this.Factory = new GoogleAnalyticsWebRequestFactory(useHttps, sendToDebugServer);
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether we are in debug mode.
-        /// </summary>
-        public bool IsDebug { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether we are using a secure connection.
-        /// </summary>
-        public bool IsSecure { get; set; }
 
         /// <summary>
         /// Gets the user agent.
@@ -60,15 +47,9 @@ namespace Allium
         public string UserAgent { get; private set; }
 
         /// <summary>
-        /// Gets the beacon url.
+        /// Gets or sets the WebRequest creation factory.
         /// </summary>
-        public string BeaconUrl
-        {
-            get
-            {
-                return $"http{(this.IsSecure ? "s://ssl" : "://www")}.google-analytics.com/{(this.IsDebug ? "debug/" : string.Empty)}collect";
-            }
-        }
+        public IWebRequestCreate Factory { get; set; }
 
         /// <summary>
         /// Send parameters to Google Analytics.
@@ -81,7 +62,7 @@ namespace Allium
 
             try
             {
-                var response = await this.ExecuteRequest(this.ConvertParameters(parameters));
+                var response = await this.ExecuteRequest(parameters.ConvertParameters());
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     return new AnalyticsResult(true, null);
@@ -95,72 +76,12 @@ namespace Allium
             return new AnalyticsResult(false, null);
         }
 
-        private IDictionary<string, string> ConvertParameters(object parameters)
-        {
-            var parsedParameters = new Dictionary<string, string>();
-
-            foreach (var property in parameters.GetType().GetProperties(BindingFlags.Public))
-            {
-                // Try a regular parameter
-                var paramAttrib = property.GetCustomAttribute<ParameterAttribute>(true);
-                if (paramAttrib != null)
-                {
-                    var nullableType = Nullable.GetUnderlyingType(property.PropertyType);
-                    if (property.PropertyType.IsEnum || (nullableType != null && nullableType.IsEnum))
-                    {
-                        var propValue = property.GetMethod.Invoke(parameters, null);
-                        if (propValue != null)
-                        {
-                            var enumValue = paramAttrib.UseEnumValue
-                                ? ((int)propValue).ToString(CultureInfo.InvariantCulture)
-                                : propValue.ToString().ToLowerInvariant();
-                            parsedParameters.Add(paramAttrib.ParameterName, enumValue);
-                        }
-                    }
-                    else
-                    {
-                        var propValue = property.GetMethod.Invoke(parameters, null)?.ToString();
-                        if (!string.IsNullOrWhiteSpace(propValue))
-                        {
-                            parsedParameters.Add(paramAttrib.ParameterName, propValue);
-                        }
-                    }
-                }
-
-                // Try a collection parameter
-                var paramCollectionAttrib = property.GetCustomAttribute<ParameterCollectionAttribute>(true);
-                if (paramCollectionAttrib != null)
-                {
-                    int counter = paramCollectionAttrib.StartIndex;
-                    var propValue = property.GetMethod.Invoke(parameters, null) as IEnumerable<string>;
-                    foreach (var item in propValue.Take(paramCollectionAttrib.MaxItems))
-                    {
-                        parsedParameters.Add(
-                            paramCollectionAttrib.ParameterName + counter.ToString(CultureInfo.InvariantCulture),
-                            item.ToString());
-                    }
-                }
-
-                // Try the object as a new parameter object
-                var containsParamsAttrib = property.GetCustomAttribute<ContainsParametersAttribute>(true);
-                if (containsParamsAttrib != null)
-                {
-                    foreach (var record in this.ConvertParameters(property.GetValue(parameters)))
-                    {
-                        parsedParameters.Add(record.Key, record.Value);
-                    }
-                }
-            }
-
-            return parsedParameters;
-        }
-
         private async Task<HttpWebResponse> ExecuteRequest(IDictionary<string, string> parameters)
         {
             try
             {
                 var data = string.Concat(parameters.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
-                var request = WebRequest.CreateHttp($"{this.BeaconUrl}?{data}");
+                var request = this.Factory.Create(new Uri($"invalid://host?{data}"));
                 request.Headers.Add(HttpRequestHeader.UserAgent, this.UserAgent);
                 if (parameters.ContainsKey("DocumentReferrer"))
                 {

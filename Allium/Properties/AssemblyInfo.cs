@@ -47,7 +47,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.0.0")]
 
-// Expose to our test project and test dll's
+// Expose to our test project and test dll's (see https://stackoverflow.com/q/6855648/253612)
 [assembly: InternalsVisibleTo("Allium.Tests, PublicKey="
     + "00240000048000009400000006020000002400005253413100040000010001009935818938f9b6"
     + "e4b3e9a7060eb73074260094c9850df3a4acb06bef2f2aabfd5d58fb08f359d569f3bc20fffc4c"

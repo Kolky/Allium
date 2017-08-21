@@ -51,12 +51,8 @@ namespace Allium
         /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
         /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
         public AnalyticsSession(string trackingId, bool useHttps, bool sendToDebugServer)
+            : this(trackingId, new AnalyticsClient(useHttps, sendToDebugServer))
         {
-            Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
-            Requires.Range(trackingId.StartsWith("UA", StringComparison.Ordinal), nameof(trackingId));
-
-            this.Client = new AnalyticsClient(useHttps, sendToDebugServer);
-            this.Parameters = new GeneralParameters(trackingId);
         }
 
         /// <summary>
@@ -72,6 +68,8 @@ namespace Allium
 
             this.Client = client;
             this.Parameters = new GeneralParameters(trackingId);
+            this.SessionStarted = false;
+            this.SessionFinished = false;
         }
 
         /// <summary>
@@ -86,6 +84,16 @@ namespace Allium
         internal IAnalyticsClient Client { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the session was started.
+        /// </summary>
+        internal bool SessionStarted { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the session was finished.
+        /// </summary>
+        internal bool SessionFinished { get; private set; }
+
+        /// <summary>
         /// Start the current session.
         /// NOTE: Sends a message with <see cref="SessionControl.Start"/>.
         /// </summary>
@@ -94,7 +102,10 @@ namespace Allium
         {
             var parameters = this.Parameters.Clone();
             parameters.Session.SessionControl = SessionControl.Start;
-            return await this.Client.Send(parameters);
+            var results = await this.Client.Send(parameters);
+            this.SessionStarted = results != null && results.Success;
+            this.SessionFinished = !this.SessionStarted;
+            return results;
         }
 
         /// <summary>
@@ -185,9 +196,40 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> Finish()
         {
-            var parameters = this.Parameters.Clone();
-            parameters.Session.SessionControl = SessionControl.End;
-            return await this.Client.Send(parameters);
+            if (this.SessionStarted && !this.SessionFinished)
+            {
+                var parameters = this.Parameters.Clone();
+                parameters.Session.SessionControl = SessionControl.End;
+                var results = await this.Client.Send(parameters);
+                this.SessionFinished = results != null && results.Success;
+                this.SessionStarted = !this.SessionFinished;
+                return results;
+            }
+
+            // Can't finish a session we haven't started!
+            return new AnalyticsResult(false, null);
+        }
+
+        /// <summary>
+        /// Dispose; this finished the session and directly sends the parameters.
+        /// </summary>
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Actually execute the dispose.
+        /// </summary>
+        /// <param name="disposing">disposing</param>
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                var sendTask = this.Finish();
+                sendTask?.Wait();
+            }
         }
     }
 }

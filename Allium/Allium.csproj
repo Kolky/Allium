@@ -84,6 +84,7 @@
     <Compile Include="Parameters\AppTrackingParameters.cs" />
     <Compile Include="Parameters\ContentExperimentsParameters.cs" />
     <Compile Include="Parameters\ContentInformationParameters.cs" />
+    <Compile Include="Parameters\GeneralParametersExtensions.cs" />
     <Compile Include="Parameters\Hits\EventHitParameters.cs" />
     <Compile Include="Parameters\GeneralParameters.cs" />
     <Compile Include="Parameters\Hits\ExceptionHitParameters.cs" />
@@ -101,13 +102,12 @@
     <Compile Include="Parameters\TrafficSourcesParameters.cs" />
     <Compile Include="Parameters\UserParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="GoogleAnalyticsWebRequestFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

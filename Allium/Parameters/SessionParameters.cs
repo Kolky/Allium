@@ -40,7 +40,7 @@ namespace Allium.Parameters
             Requires.NotNull(copy, nameof(copy));
 
             this.SessionControl = copy.SessionControl;
-            this.IPOverride = new IPAddress(copy.IPOverride.GetAddressBytes());
+            this.IPOverride = copy.IPOverride != null ? new IPAddress(copy.IPOverride.GetAddressBytes()) : null;
             this.UserAgentOverride = copy.UserAgentOverride;
             this.GeographicalOverride = copy.GeographicalOverride;
         }

@@ -109,7 +109,19 @@ namespace Allium
         /// </summary>
         public void Dispose()
         {
-            Task.Run(this.FinishAndSend);
+        }
+
+        /// <summary>
+        /// Actually execute the dispose.
+        /// </summary>
+        /// <param name="disposing">disposing</param>
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                var sendTask = this.FinishAndSend();
+                sendTask.Wait();
+            }
         }
     }
 }

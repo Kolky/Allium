@@ -19,7 +19,7 @@ namespace Allium.Interfaces
     /// <summary>
     /// Interface for a Analytics session.
     /// </summary>
-    public interface IAnalyticsSession
+    public interface IAnalyticsSession : IDisposable
     {
         /// <summary>
         /// Gets the parameters for the whole session.

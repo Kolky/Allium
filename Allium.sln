@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allium", "Allium\Allium.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allium.Tests", "Allium.Tests\Allium.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution FIles", "Solution FIles", "{C3DA7A96-1530-49E2-9107-4BD8156B9DAD}"
+	ProjectSection(SolutionItems) = preProject
+		Allium.CodeCoverage.bat = Allium.CodeCoverage.bat
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
