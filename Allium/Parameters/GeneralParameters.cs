@@ -88,7 +88,7 @@ namespace Allium.Parameters
         /// Gets or sets a value that represents the time the hit was in the queue. (in milliseconds)
         /// </summary>
         [Parameter("qt")]
-        public uint? QueueTime { get; set; }
+        public int? QueueTime { get; set; }
 
         /// <summary>
         /// Gets or sets a random number in GET requests to ensure browsers and proxies don't cache hits.

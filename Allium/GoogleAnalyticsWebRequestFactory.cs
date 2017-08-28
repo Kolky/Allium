@@ -12,12 +12,14 @@
 namespace Allium
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Net;
+    using Validation;
 
     /// <summary>
     /// WebRequest factory for GoogleAnalytics.
     /// </summary>
-    public class GoogleAnalyticsWebRequestFactory : IWebRequestCreate
+    public sealed class GoogleAnalyticsWebRequestFactory : IWebRequestCreate
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="GoogleAnalyticsWebRequestFactory"/> class.
@@ -43,6 +45,7 @@ namespace Allium
         /// <summary>
         /// Gets the beacon url.
         /// </summary>
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)", Justification = "Not needed for uri's.")]
         public Uri BeaconUrl
         {
             get
@@ -56,8 +59,11 @@ namespace Allium
         /// </summary>
         /// <param name="uri">uri</param>
         /// <returns>The WebRequest that was created.</returns>
+        [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "We don't want the full Uri.")]
         public WebRequest Create(Uri uri)
         {
+            Requires.NotNull(uri, nameof(uri));
+
             return WebRequest.Create(new Uri(this.BeaconUrl, uri.Query));
         }
     }

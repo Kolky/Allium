@@ -12,18 +12,20 @@
 namespace Allium
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Enums;
     using Interfaces;
     using Interfaces.Parameters;
     using Parameters;
     using Parameters.Hits;
+    using Properties;
     using Validation;
 
     /// <summary>
     /// Google Analytics Session.
     /// </summary>
-    public class AnalyticsSession : IAnalyticsSession
+    public sealed class AnalyticsSession : IAnalyticsSession
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
@@ -100,12 +102,18 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> Start()
         {
-            var parameters = this.Parameters.Clone();
-            parameters.Session.SessionControl = SessionControl.Start;
-            var results = await this.Client.Send(parameters);
-            this.SessionStarted = results != null && results.Success;
-            this.SessionFinished = !this.SessionStarted;
-            return results;
+            if (!this.SessionStarted || this.SessionFinished)
+            {
+                var parameters = this.Parameters.Clone();
+                parameters.Session.SessionControl = SessionControl.Start;
+                var results = await this.Client.Send(parameters);
+                this.SessionStarted = results != null && results.Success;
+                this.SessionFinished = !this.SessionStarted;
+                return results;
+            }
+
+            // Can't start a session if one is active!
+            return new AnalyticsResult(new AnalyticsException(Resources.HasAlreadyStartedSession));
         }
 
         /// <summary>
@@ -134,11 +142,22 @@ namespace Allium
         /// <summary>
         /// Track a PageView.
         /// </summary>
+        /// <param name="uri">uri</param>
+        /// <returns>Analytics Results</returns>
+        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Does not see it is fixed, bug?")]
+        public async Task<IAnalyticsResult> TrackPageViewHit(string uri)
+        {
+            return await this.TrackPageViewHit(new Uri(uri));
+        }
+
+        /// <summary>
+        /// Track a PageView.
+        /// </summary>
         /// <param name="url">url</param>
         /// <returns>Analytics Results</returns>
-        public async Task<IAnalyticsResult> TrackPageViewHit(string url)
+        public async Task<IAnalyticsResult> TrackPageViewHit(Uri url)
         {
-            var parameters = new PageViewHitParameters(this.Parameters.Clone(), url);
+            var parameters = new PageViewHitParameters(this.Parameters.Clone(), url.ToString());
             return await this.Client.Send(parameters);
         }
 
@@ -170,11 +189,11 @@ namespace Allium
         /// </summary>
         /// <param name="network">network</param>
         /// <param name="action">action</param>
-        /// <param name="url">url</param>
+        /// <param name="target">target</param>
         /// <returns>Analytics Results</returns>
-        public async Task<IAnalyticsResult> TrackSocialHit(string network, string action, string url)
+        public async Task<IAnalyticsResult> TrackSocialHit(string network, string action, string target)
         {
-            var parameters = new SocialHitParameters(this.Parameters.Clone(), network, action, url);
+            var parameters = new SocialHitParameters(this.Parameters.Clone(), network, action, target);
             return await this.Client.Send(parameters);
         }
 
@@ -207,7 +226,7 @@ namespace Allium
             }
 
             // Can't finish a session we haven't started!
-            return new AnalyticsResult(false, null);
+            return new AnalyticsResult(new AnalyticsException(Resources.HasNotYetStartedSession));
         }
 
         /// <summary>
@@ -223,7 +242,7 @@ namespace Allium
         /// Actually execute the dispose.
         /// </summary>
         /// <param name="disposing">disposing</param>
-        private void Dispose(bool disposing)
+        internal void Dispose(bool disposing)
         {
             if (disposing)
             {

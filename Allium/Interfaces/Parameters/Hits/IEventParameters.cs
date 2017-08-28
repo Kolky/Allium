@@ -37,6 +37,6 @@ namespace Allium.Interfaces.Parameters.Hits
         /// <summary>
         /// Gets or sets the event value. Values must be non-negative.
         /// </summary>
-        uint EventValue { get; set; }
+        int EventValue { get; set; }
     }
 }

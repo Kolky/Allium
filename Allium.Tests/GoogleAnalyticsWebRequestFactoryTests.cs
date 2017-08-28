@@ -12,6 +12,7 @@
 namespace Allium.Tests
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using Allium;
     using NUnit.Framework;
 
@@ -46,6 +47,7 @@ namespace Allium.Tests
             Assert.AreEqual("https://ssl.google-analytics.com/debug/collect?data=true", request.RequestUri.ToString());
         }
 
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "Not needed for uri's.")]
         private void TestFactory(GoogleAnalyticsWebRequestFactory factory, bool useHttps, bool sendToDebugServer)
         {
             Assert.NotNull(factory);

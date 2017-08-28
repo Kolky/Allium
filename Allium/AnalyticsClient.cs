@@ -13,6 +13,7 @@ namespace Allium
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Net;
     using System.Reflection;
@@ -20,6 +21,7 @@ namespace Allium
     using Interfaces;
     using Interfaces.Parameters;
     using Parameters;
+    using Properties;
     using Validation;
 
     /// <summary>
@@ -32,6 +34,8 @@ namespace Allium
         /// </summary>
         /// <param name="useHttps">useHttps</param>
         /// <param name="sendToDebugServer">sendToDebugServer</param>
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "Not really useful here.")]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object,System.Object)", Justification = "Not really useful here.")]
         public AnalyticsClient(bool useHttps, bool sendToDebugServer)
         {
             var assemblyName = Assembly.GetAssembly(typeof(AnalyticsClient)).GetName();
@@ -60,20 +64,21 @@ namespace Allium
         {
             Requires.NotNull(parameters, nameof(parameters));
 
+            HttpWebResponse response;
             try
             {
-                var response = await this.ExecuteRequest(parameters.ConvertParameters());
+                response = await this.ExecuteRequest(parameters.ConvertParameters());
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
-                    return new AnalyticsResult(true, null);
+                    return new AnalyticsResult(true);
                 }
             }
             catch (Exception exception)
             {
-                return new AnalyticsResult(false, exception);
+                return new AnalyticsResult(exception);
             }
 
-            return new AnalyticsResult(false, null);
+            return new AnalyticsResult(new AnalyticsException(string.Format(Resources.InvalidResponse, response.StatusCode)));
         }
 
         private async Task<HttpWebResponse> ExecuteRequest(IDictionary<string, string> parameters)
@@ -81,8 +86,8 @@ namespace Allium
             try
             {
                 var data = string.Concat(parameters.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
-                var request = this.Factory.Create(new Uri($"invalid://host?{data}"));
-                request.Headers.Add(HttpRequestHeader.UserAgent, this.UserAgent);
+                var request = this.Factory.Create(new Uri($"invalid://host?{data}")) as HttpWebRequest;
+                request.UserAgent = this.UserAgent;
                 if (parameters.ContainsKey("DocumentReferrer"))
                 {
                     request.Headers.Add(HttpRequestHeader.Referer, parameters["ReferralUrl"]);

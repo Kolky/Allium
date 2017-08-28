@@ -11,6 +11,7 @@
 
 namespace Allium.Parameters.Hits
 {
+    using System;
     using Attributes;
     using Enums;
     using Interfaces.Parameters;
@@ -26,11 +27,21 @@ namespace Allium.Parameters.Hits
         /// Initializes a new instance of the <see cref="PageViewHitParameters"/> class.
         /// </summary>
         /// <param name="copy">copy</param>
+        /// <param name="urlString">urlString</param>
+        public PageViewHitParameters(IGeneralParameters copy, string urlString)
+            : this(copy, new Uri(urlString))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PageViewHitParameters"/> class.
+        /// </summary>
+        /// <param name="copy">copy</param>
         /// <param name="url">url</param>
-        public PageViewHitParameters(IGeneralParameters copy, string url)
+        public PageViewHitParameters(IGeneralParameters copy, Uri url)
             : base(copy)
         {
-            Requires.NotNullOrWhiteSpace(url, nameof(url));
+            Requires.NotNull(url, nameof(url));
 
             this.DocumentLocationUrl = url;
         }
@@ -63,7 +74,7 @@ namespace Allium.Parameters.Hits
         /// Gets or sets the document location url.
         /// </summary>
         [Parameter("dl", NecessarySet = nameof(PageViewHitParameters))]
-        public string DocumentLocationUrl { get; set; }
+        public Uri DocumentLocationUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the document host name.

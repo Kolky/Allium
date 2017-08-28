@@ -9,6 +9,7 @@
 // Licensed under the MS-PL license. See LICENSE.md file for full license information.
 // </copyright>
 
+using System;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
@@ -30,6 +31,7 @@ using System.Runtime.InteropServices;
 // to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
+[assembly: CLSCompliant(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("e2d5f38e-a68a-41ee-aaf1-aaa1f61a327b")]

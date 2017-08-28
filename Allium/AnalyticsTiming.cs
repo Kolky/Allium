@@ -16,6 +16,7 @@ namespace Allium
     using Interfaces;
     using Interfaces.Parameters.Hits;
     using Parameters.Hits;
+    using Properties;
     using Validation;
 
     /// <summary>
@@ -36,6 +37,8 @@ namespace Allium
             this.Session = session;
             this.Parameters = new TimingHitParameters(this.Session.Parameters.Clone(), category, name);
             this.Started = DateTime.Now;
+            this.TimingFinished = false;
+            this.TimingSend = false;
         }
 
         /// <summary>
@@ -75,12 +78,26 @@ namespace Allium
         }
 
         /// <summary>
+        /// Gets a value indicating whether the timing was finished.
+        /// </summary>
+        internal bool TimingFinished { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the timing was sent.
+        /// </summary>
+        internal bool TimingSend { get; private set; }
+
+        /// <summary>
         /// Finish the timing measurement.
         /// NOTE: Sequential calls updates the finished value.
         /// </summary>
         public void Finish()
         {
-            this.Finished = DateTime.Now;
+            if (!this.TimingFinished && !this.TimingSend)
+            {
+                this.Finished = DateTime.Now;
+                this.TimingFinished = true;
+            }
         }
 
         /// <summary>
@@ -99,9 +116,16 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> Send()
         {
-            var parameters = new TimingHitParameters(this.Parameters.Clone(), this.Parameters.UserTimingCategory, this.Parameters.UserTimingVariableName);
-            parameters.UserTimingTime = this.Elapsed.HasValue ? (int)this.Elapsed.Value.TotalMilliseconds : 0;
-            return await this.Session.Client.Send(parameters);
+            if (this.TimingFinished && !this.TimingSend)
+            {
+                var parameters = new TimingHitParameters(this.Parameters.Clone(), this.Parameters.UserTimingCategory, this.Parameters.UserTimingVariableName);
+                parameters.UserTimingTime = this.Elapsed.HasValue ? (int)this.Elapsed.Value.TotalMilliseconds : 0;
+                var result = await this.Session.Client.Send(parameters);
+                this.TimingSend = true;
+                return result;
+            }
+
+            return new AnalyticsResult(new AnalyticsException(Resources.HasNotYetFinishedTiming));
         }
 
         /// <summary>
@@ -109,18 +133,23 @@ namespace Allium
         /// </summary>
         public void Dispose()
         {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
         /// Actually execute the dispose.
         /// </summary>
         /// <param name="disposing">disposing</param>
-        private void Dispose(bool disposing)
+        internal void Dispose(bool disposing)
         {
             if (disposing)
             {
-                var sendTask = this.FinishAndSend();
-                sendTask.Wait();
+                if (!this.TimingFinished || !this.TimingSend)
+                {
+                    var sendTask = this.FinishAndSend();
+                    sendTask.Wait();
+                }
             }
         }
     }

@@ -53,9 +53,16 @@ namespace Allium.Interfaces
         /// <summary>
         /// Track a PageView.
         /// </summary>
+        /// <param name="uri">url</param>
+        /// <returns>Analytics Results</returns>
+        Task<IAnalyticsResult> TrackPageViewHit(string uri);
+
+        /// <summary>
+        /// Track a PageView.
+        /// </summary>
         /// <param name="url">url</param>
         /// <returns>Analytics Results</returns>
-        Task<IAnalyticsResult> TrackPageViewHit(string url);
+        Task<IAnalyticsResult> TrackPageViewHit(Uri url);
 
         /// <summary>
         /// Track a PageView.
@@ -77,9 +84,9 @@ namespace Allium.Interfaces
         /// </summary>
         /// <param name="network">network</param>
         /// <param name="action">action</param>
-        /// <param name="url">url</param>
+        /// <param name="target">target</param>
         /// <returns>Analytics Results</returns>
-        Task<IAnalyticsResult> TrackSocialHit(string network, string action, string url);
+        Task<IAnalyticsResult> TrackSocialHit(string network, string action, string target);
 
         /// <summary>
         /// Start a timer to track.

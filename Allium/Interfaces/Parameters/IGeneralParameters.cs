@@ -43,7 +43,7 @@ namespace Allium.Interfaces.Parameters
         /// <summary>
         /// Gets or sets a value that represents the time the hit was in the queue. (in milliseconds)
         /// </summary>
-        uint? QueueTime { get; set; }
+        int? QueueTime { get; set; }
 
         /// <summary>
         /// Gets or sets a random number in GET requests to ensure browsers and proxies don't cache hits.

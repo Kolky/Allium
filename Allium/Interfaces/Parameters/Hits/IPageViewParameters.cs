@@ -11,6 +11,7 @@
 
 namespace Allium.Interfaces.Parameters.Hits
 {
+    using System;
     using Enums;
 
     /// <summary>
@@ -23,7 +24,7 @@ namespace Allium.Interfaces.Parameters.Hits
         /// <summary>
         /// Gets or sets the document location url.
         /// </summary>
-        string DocumentLocationUrl { get; set; }
+        Uri DocumentLocationUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the document host name.

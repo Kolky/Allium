@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution FIles", "Solution FIles", "{C3DA7A96-1530-49E2-9107-4BD8156B9DAD}"
 	ProjectSection(SolutionItems) = preProject
 		Allium.CodeCoverage.bat = Allium.CodeCoverage.bat
+		Allium.ruleset = Allium.ruleset
+		Allium.Tests.ruleset = Allium.Tests.ruleset
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection

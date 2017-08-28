@@ -13,6 +13,7 @@ namespace Allium.Parameters
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -34,11 +35,12 @@ namespace Allium.Parameters
             return ConvertParameters((object)parameters);
         }
 
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "The API requires lower case.")]
         private static IDictionary<string, string> ConvertParameters(object parameters)
         {
             var parsedParameters = new Dictionary<string, string>();
 
-            foreach (var property in parameters.GetType().GetProperties(BindingFlags.Public))
+            foreach (var property in parameters.GetType().GetProperties())
             {
                 // Try a regular parameter
                 var paramAttrib = property.GetCustomAttribute<ParameterAttribute>(true);

@@ -106,6 +106,43 @@ namespace Allium.Tests
         [Test]
         public void StartTest()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                this.AssertParameters(session.Parameters);
+
+                // Start the session.
+                var task = session.Start();
+                task.Wait();
+                Assert.NotNull(task.Result);
+                Assert.IsTrue(task.Result.Success);
+                Assert.Null(task.Result.Exception);
+
+                // Start the session again.
+                task = session.Start();
+                task.Wait();
+                Assert.NotNull(task.Result);
+                Assert.IsFalse(task.Result.Success);
+                Assert.That(
+                    task.Result.Exception,
+                    Is.TypeOf<AnalyticsException>().And.Message.EqualTo("Can't start a new session when one is already active!"));
+
+                // Now finish the session.
+                task = session.Finish();
+                task.Wait();
+                Assert.NotNull(task.Result);
+                Assert.IsTrue(task.Result.Success);
+                Assert.Null(task.Result.Exception);
+            }
         }
 
         /// <summary>
@@ -114,6 +151,21 @@ namespace Allium.Tests
         [Test]
         public void TrackEventHitTest()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                var eventHit = session.TrackEventHit("Category", "Action");
+                var task = eventHit.Send();
+                task.Wait();
+            }
         }
 
         /// <summary>
@@ -122,6 +174,20 @@ namespace Allium.Tests
         [Test]
         public void TrackExceptionHitTest()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                var task = session.TrackExceptionHit(new AnalyticsException("Failure"), true);
+                task.Wait();
+            }
         }
 
         /// <summary>
@@ -130,6 +196,20 @@ namespace Allium.Tests
         [Test]
         public void TrackPageViewHitTest()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                var task = session.TrackPageViewHit("Host", "Path");
+                task.Wait();
+            }
         }
 
         /// <summary>
@@ -162,6 +242,23 @@ namespace Allium.Tests
         [Test]
         public void TrackTimerHitTest()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                using (var timer = session.TrackTimerHit("Category", "Name"))
+                {
+                    var task = timer.FinishAndSend();
+                    task.Wait();
+                }
+            }
         }
 
         /// <summary>
@@ -189,7 +286,9 @@ namespace Allium.Tests
                 task.Wait();
                 Assert.NotNull(task.Result);
                 Assert.IsFalse(task.Result.Success);
-                Assert.Null(task.Result.Exception);
+                Assert.That(
+                    task.Result.Exception,
+                    Is.TypeOf<AnalyticsException>().And.Message.EqualTo("Can't finish a session we haven't started yet!"));
 
                 // Start the session.
                 task = session.Start();
@@ -223,13 +322,12 @@ namespace Allium.Tests
         private IWebRequestCreate ExpectWebRequest(MockRepository repository, IWebRequestCreate factory, HttpStatusCode statusCode)
         {
             var requestHeaders = repository.PartialMock<WebHeaderCollection>();
-            var request = repository.PartialMock<HttpWebRequest>();
+            var request = repository.Stub<HttpWebRequest>();
             var response = repository.PartialMock<HttpWebResponse>();
 
             // TODO: Expect parameters in URI!
             factory.Expect(x => x.Create(Arg<Uri>.Is.Anything)).Return(request).Repeat.Once();
-            request.Expect(x => x.Headers).Return(requestHeaders).Repeat.Once();
-            requestHeaders.Expect(x => x.Add(Arg<HttpRequestHeader>.Is.Anything, Arg<string>.Is.Anything)).Repeat.Once();
+            request.Headers = requestHeaders;
             request.Expect(x => x.GetResponseAsync()).Return(Task.Run<WebResponse>(() => response)).Repeat.Once();
             response.Expect(x => x.StatusCode).Return(statusCode).Repeat.Once();
 

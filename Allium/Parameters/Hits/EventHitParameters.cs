@@ -68,6 +68,6 @@ namespace Allium.Parameters.Hits
         /// Gets or sets the event value. Values must be non-negative.
         /// </summary>
         [Parameter("ev")]
-        public uint EventValue { get; set; }
+        public int EventValue { get; set; }
     }
 }

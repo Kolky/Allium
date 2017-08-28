@@ -11,6 +11,7 @@
 
 namespace Allium.Parameters.Hits
 {
+    using System;
     using Attributes;
     using Enums;
     using Interfaces.Parameters;
@@ -28,17 +29,17 @@ namespace Allium.Parameters.Hits
         /// <param name="copy">copy</param>
         /// <param name="network">network</param>
         /// <param name="action">action</param>
-        /// <param name="url">url</param>
-        public SocialHitParameters(IGeneralParameters copy, string network, string action, string url)
+        /// <param name="target">target</param>
+        public SocialHitParameters(IGeneralParameters copy, string network, string action, string target)
             : base(copy)
         {
             Requires.NotNullOrWhiteSpace(network, nameof(network));
             Requires.NotNullOrWhiteSpace(action, nameof(action));
-            Requires.NotNullOrWhiteSpace(url, nameof(url));
+            Requires.NotNullOrWhiteSpace(target, nameof(target));
 
             this.SocialNetwork = network;
             this.SocialAction = action;
-            this.SocialActionTarget = url;
+            this.SocialActionTarget = target;
         }
 
         /// <summary>

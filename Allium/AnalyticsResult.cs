@@ -23,10 +23,19 @@ namespace Allium
         /// Initializes a new instance of the <see cref="AnalyticsResult"/> class.
         /// </summary>
         /// <param name="success">success</param>
-        /// <param name="exception">exception</param>
-        public AnalyticsResult(bool success, Exception exception)
+        public AnalyticsResult(bool success)
         {
             this.Success = success;
+            this.Exception = null;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsResult"/> class.
+        /// </summary>
+        /// <param name="exception">exception</param>
+        public AnalyticsResult(Exception exception)
+        {
+            this.Success = false;
             this.Exception = exception;
         }
 
