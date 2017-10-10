@@ -12,11 +12,14 @@
 namespace Allium.Tests
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Net;
     using System.Threading.Tasks;
     using Interfaces;
     using Interfaces.Parameters;
     using NUnit.Framework;
+    using Properties;
     using Rhino.Mocks;
 
     /// <summary>
@@ -75,7 +78,7 @@ namespace Allium.Tests
         }
 
         /// <summary>
-        /// Test for constructor <see cref="AnalyticsSession(string, bool, bool)"/>.
+        /// Test for constructor <see cref="AnalyticsSession(string, IAnalyticsClient)"/>.
         /// </summary>
         [Test]
         public void AnalyticsSessionTest3()
@@ -101,10 +104,10 @@ namespace Allium.Tests
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.Start"/> and <see cref="AnalyticsSession.Finish"/>.
         /// </summary>
         [Test]
-        public void StartTest()
+        public void StartAndFinishTest()
         {
             var repository = new MockRepository();
             var factory = repository.StrictMock<IWebRequestCreate>();
@@ -121,32 +124,18 @@ namespace Allium.Tests
                 this.AssertParameters(session.Parameters);
 
                 // Start the session.
-                var task = session.Start();
-                task.Wait();
-                Assert.NotNull(task.Result);
-                Assert.IsTrue(task.Result.Success);
-                Assert.Null(task.Result.Exception);
+                this.AssertResultSuccess(session.Start());
 
                 // Start the session again.
-                task = session.Start();
-                task.Wait();
-                Assert.NotNull(task.Result);
-                Assert.IsFalse(task.Result.Success);
-                Assert.That(
-                    task.Result.Exception,
-                    Is.TypeOf<AnalyticsException>().And.Message.EqualTo("Can't start a new session when one is already active!"));
+                this.AssertResultFailed(session.Start(), Resources.HasAlreadyStartedSession);
 
                 // Now finish the session.
-                task = session.Finish();
-                task.Wait();
-                Assert.NotNull(task.Result);
-                Assert.IsTrue(task.Result.Success);
-                Assert.Null(task.Result.Exception);
+                this.AssertResultSuccess(session.Finish());
             }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackEventHit"/>.
         /// </summary>
         [Test]
         public void TrackEventHitTest()
@@ -163,13 +152,18 @@ namespace Allium.Tests
             {
                 session.Client.Factory = factory;
                 var eventHit = session.TrackEventHit("Category", "Action");
-                var task = eventHit.Send();
-                task.Wait();
+                Assert.NotNull(eventHit);
+                Assert.NotNull(eventHit.Parameters);
+                Assert.AreNotSame(session.Parameters, eventHit.Parameters);
+                Assert.AreEqual("Category", eventHit.Parameters.EventCategory);
+                Assert.AreEqual("Action", eventHit.Parameters.EventAction);
+
+                this.AssertResultSuccess(eventHit.Send());
             }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackExceptionHit"/>.
         /// </summary>
         [Test]
         public void TrackExceptionHitTest()
@@ -185,16 +179,15 @@ namespace Allium.Tests
             using (var session = new AnalyticsSession(TestTrackingId))
             {
                 session.Client.Factory = factory;
-                var task = session.TrackExceptionHit(new AnalyticsException("Failure"), true);
-                task.Wait();
+                this.AssertResultSuccess(session.TrackExceptionHit(new AnalyticsException("Failure"), true));
             }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackPageViewHit(string, string)"/>.
         /// </summary>
         [Test]
-        public void TrackPageViewHitTest()
+        public void TrackPageViewHitTest1()
         {
             var repository = new MockRepository();
             var factory = repository.StrictMock<IWebRequestCreate>();
@@ -207,37 +200,120 @@ namespace Allium.Tests
             using (var session = new AnalyticsSession(TestTrackingId))
             {
                 session.Client.Factory = factory;
-                var task = session.TrackPageViewHit("Host", "Path");
-                task.Wait();
+                this.AssertResultSuccess(session.TrackPageViewHit("Host", "Path"));
             }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackPageViewHit(Uri)"/>.
         /// </summary>
         [Test]
-        public void TrackPageViewHitTest1()
+        public void TrackPageViewHitTest2()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                this.AssertResultSuccess(session.TrackPageViewHit(new Uri("http://localhost")));
+            }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackPageViewHit(string)"/>.
+        /// </summary>
+        [Test]
+        [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "Need to hit for CodeCoverage.")]
+        public void TrackPageViewHitTest3()
+        {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                this.AssertResultSuccess(session.TrackPageViewHit("http://localhost"));
+            }
+        }
+
+        /// <summary>
+        /// Test for method <see cref="AnalyticsSession.TrackScreenViewHit"/>.
         /// </summary>
         [Test]
         public void TrackScreenViewHitTest()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                this.AssertResultSuccess(session.TrackScreenViewHit("Screen"));
+            }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackScreenViewHit"/>.
+        /// </summary>
+        [Test]
+        public void TrackScreenViewHitServiceUnavailableTest()
+        {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.ServiceUnavailable);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                this.AssertResultFailed(
+                    session.TrackScreenViewHit("Screen"),
+                    string.Format(CultureInfo.InvariantCulture, Resources.InvalidResponse, HttpStatusCode.ServiceUnavailable));
+            }
+        }
+
+        /// <summary>
+        /// Test for method <see cref="AnalyticsSession.TrackSocialHit"/>.
         /// </summary>
         [Test]
         public void TrackSocialHitTest()
         {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                this.AssertResultSuccess(session.TrackSocialHit("Network", "Action", "Target"));
+            }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackTimerHit"/>.
         /// </summary>
         [Test]
         public void TrackTimerHitTest()
@@ -255,17 +331,53 @@ namespace Allium.Tests
                 session.Client.Factory = factory;
                 using (var timer = session.TrackTimerHit("Category", "Name"))
                 {
-                    var task = timer.FinishAndSend();
-                    task.Wait();
+                    Assert.IsNull(timer.Elapsed);
+                    Assert.NotNull(timer.Parameters);
+                    Assert.AreNotSame(session.Parameters, timer.Parameters);
+                    Assert.AreEqual("Category", timer.Parameters.UserTimingCategory);
+                    Assert.AreEqual("Name", timer.Parameters.UserTimingVariableName);
+
+                    this.AssertResultSuccess(timer.FinishAndSend());
+                    Assert.NotNull(timer.Elapsed);
                 }
             }
         }
 
         /// <summary>
-        /// Test for method <see cref="AnalyticsSession.Start"/>.
+        /// Test for method <see cref="AnalyticsSession.TrackTimerHit"/>.
         /// </summary>
         [Test]
-        public void FinishTest()
+        public void TrackTimerHitNotYetFinishedTest()
+        {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                this.ExpectWebRequest(repository, factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                using (var timer = session.TrackTimerHit("Category", "Name"))
+                {
+                    Assert.IsNull(timer.Elapsed);
+                    Assert.NotNull(timer.Parameters);
+                    Assert.AreNotSame(session.Parameters, timer.Parameters);
+                    Assert.AreEqual("Category", timer.Parameters.UserTimingCategory);
+                    Assert.AreEqual("Name", timer.Parameters.UserTimingVariableName);
+
+                    this.AssertResultFailed(timer.Send(), Resources.HasNotYetFinishedTiming);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Test for method <see cref="AnalyticsSession.Finish"/> and <see cref="AnalyticsSession.Start"/>.
+        /// </summary>
+        [Test]
+        public void FinishAndStartTest()
         {
             var repository = new MockRepository();
             var factory = repository.StrictMock<IWebRequestCreate>();
@@ -282,27 +394,13 @@ namespace Allium.Tests
                 this.AssertParameters(session.Parameters);
 
                 // Finish without start fails the result
-                var task = session.Finish();
-                task.Wait();
-                Assert.NotNull(task.Result);
-                Assert.IsFalse(task.Result.Success);
-                Assert.That(
-                    task.Result.Exception,
-                    Is.TypeOf<AnalyticsException>().And.Message.EqualTo("Can't finish a session we haven't started yet!"));
+                this.AssertResultFailed(session.Finish(), Resources.HasNotYetStartedSession);
 
                 // Start the session.
-                task = session.Start();
-                task.Wait();
-                Assert.NotNull(task.Result);
-                Assert.IsTrue(task.Result.Success);
-                Assert.Null(task.Result.Exception);
+                this.AssertResultSuccess(session.Start());
 
                 // Now finish the session.
-                task = session.Finish();
-                task.Wait();
-                Assert.NotNull(task.Result);
-                Assert.IsTrue(task.Result.Success);
-                Assert.Null(task.Result.Exception);
+                this.AssertResultSuccess(session.Finish());
             }
         }
 
@@ -319,6 +417,27 @@ namespace Allium.Tests
             session.Client.Factory = this.ExpectWebRequest(repository, repository.DynamicMock<IWebRequestCreate>(), HttpStatusCode.OK);
         }
 
+        private void AssertResultSuccess(Task<IAnalyticsResult> task)
+        {
+            Assert.NotNull(task);
+            task.Wait();
+
+            Assert.NotNull(task.Result);
+            Assert.IsTrue(task.Result.Success);
+            Assert.IsNull(task.Result.Exception);
+        }
+
+        private void AssertResultFailed(Task<IAnalyticsResult> task, string message)
+        {
+            Assert.NotNull(task);
+            task.Wait();
+
+            Assert.NotNull(task.Result);
+            Assert.IsFalse(task.Result.Success);
+            Assert.IsInstanceOf<AnalyticsException>(task.Result.Exception);
+            Assert.AreEqual(message, task.Result.Exception.Message);
+        }
+
         private IWebRequestCreate ExpectWebRequest(MockRepository repository, IWebRequestCreate factory, HttpStatusCode statusCode)
         {
             var requestHeaders = repository.PartialMock<WebHeaderCollection>();
@@ -329,7 +448,7 @@ namespace Allium.Tests
             factory.Expect(x => x.Create(Arg<Uri>.Is.Anything)).Return(request).Repeat.Once();
             request.Headers = requestHeaders;
             request.Expect(x => x.GetResponseAsync()).Return(Task.Run<WebResponse>(() => response)).Repeat.Once();
-            response.Expect(x => x.StatusCode).Return(statusCode).Repeat.Once();
+            response.Expect(x => x.StatusCode).Return(statusCode).Repeat.Any();
 
             return factory;
         }

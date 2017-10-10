@@ -68,9 +68,16 @@ namespace Allium
             try
             {
                 response = await this.ExecuteRequest(parameters.ConvertParameters());
-                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                if (response != null)
                 {
-                    return new AnalyticsResult(true);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        return new AnalyticsResult(true);
+                    }
+                    else
+                    {
+                        return new AnalyticsResult(new AnalyticsException(string.Format(Resources.InvalidResponse, response.StatusCode)));
+                    }
                 }
             }
             catch (Exception exception)
@@ -78,7 +85,7 @@ namespace Allium
                 return new AnalyticsResult(exception);
             }
 
-            return new AnalyticsResult(new AnalyticsException(string.Format(Resources.InvalidResponse, response.StatusCode)));
+            return new AnalyticsResult(new AnalyticsException(Resources.RequestFailed));
         }
 
         private async Task<HttpWebResponse> ExecuteRequest(IDictionary<string, string> parameters)

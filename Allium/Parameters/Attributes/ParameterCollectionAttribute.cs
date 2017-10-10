@@ -37,11 +37,6 @@ namespace Allium.Parameters.Attributes
         public string ParameterName { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the parameter is required.
-        /// </summary>
-        public bool Required { get; set; }
-
-        /// <summary>
         /// Gets or sets the index to start counting at.
         /// </summary>
         public int StartIndex { get; set; }

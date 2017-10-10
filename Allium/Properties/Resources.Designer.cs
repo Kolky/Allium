@@ -95,5 +95,14 @@ namespace Allium.Properties {
                 return ResourceManager.GetString("InvalidResponse", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request failed!.
+        /// </summary>
+        internal static string RequestFailed {
+            get {
+                return ResourceManager.GetString("RequestFailed", resourceCulture);
+            }
+        }
     }
 }

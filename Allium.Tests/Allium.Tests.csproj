@@ -52,8 +52,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyticsClientTests.cs" />
+    <Compile Include="AnalyticsExceptionTests.cs" />
     <Compile Include="AnalyticsSessionTests.cs" />
     <Compile Include="GoogleAnalyticsWebRequestFactoryTests.cs" />
+    <Compile Include="Parameters\CloneTests.cs" />
+    <Compile Include="Parameters\SessionParametersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
