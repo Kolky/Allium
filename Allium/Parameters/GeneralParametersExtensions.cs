@@ -60,10 +60,12 @@ namespace Allium.Parameters
                     }
                     else
                     {
-                        var propValue = property.GetMethod.Invoke(parameters, null)?.ToString();
-                        if (!string.IsNullOrWhiteSpace(propValue))
+                        var propValue = property.GetMethod.Invoke(parameters, null);
+                        var propValueString = propValue?.ToString();
+                        object propDefaultValue = property.PropertyType.IsValueType ? Activator.CreateInstance(property.PropertyType) : null;
+                        if ((!string.IsNullOrWhiteSpace(propValueString) && !property.PropertyType.IsValueType) || propValueString != propDefaultValue?.ToString())
                         {
-                            parsedParameters.Add(paramAttrib.ParameterName, propValue);
+                            parsedParameters.Add(paramAttrib.ParameterName, propValueString);
                         }
                     }
                 }
