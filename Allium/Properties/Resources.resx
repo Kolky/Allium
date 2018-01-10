@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="HasAlreadyFinishedSession" xml:space="preserve">
+    <value>Can't finish a session that was already finished!</value>
+  </data>
+  <data name="HasAlreadySentTiming" xml:space="preserve">
+    <value>Can't send a timing session that was already sent!</value>
+  </data>
   <data name="HasAlreadyStartedSession" xml:space="preserve">
     <value>Can't start a new session when one is already active!</value>
   </data>

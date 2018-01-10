@@ -37,8 +37,6 @@ namespace Allium
             this.Session = session;
             this.Parameters = new TimingHitParameters(this.Session.Parameters.Clone(), category, name);
             this.Started = DateTime.Now;
-            this.TimingFinished = false;
-            this.TimingSend = false;
         }
 
         /// <summary>
@@ -78,25 +76,24 @@ namespace Allium
         }
 
         /// <summary>
-        /// Gets a value indicating whether the timing was finished.
-        /// </summary>
-        internal bool TimingFinished { get; private set; }
-
-        /// <summary>
         /// Gets a value indicating whether the timing was sent.
         /// </summary>
         internal bool TimingSend { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the timing was disposed.
+        /// </summary>
+        internal bool Disposed { get; private set; }
+
+        /// <summary>
         /// Finish the timing measurement.
-        /// NOTE: Sequential calls updates the finished value.
+        /// NOTE: Sequential calls updates the finished value (only if not already send).
         /// </summary>
         public void Finish()
         {
-            if (!this.TimingFinished && !this.TimingSend)
+            if (!this.Finished.HasValue && !this.TimingSend)
             {
                 this.Finished = DateTime.Now;
-                this.TimingFinished = true;
             }
         }
 
@@ -116,20 +113,30 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> Send()
         {
-            if (this.TimingFinished && !this.TimingSend)
+            if (this.Disposed)
             {
-                var parameters = new TimingHitParameters(this.Parameters.Clone(), this.Parameters.UserTimingCategory, this.Parameters.UserTimingVariableName);
-                parameters.UserTimingTime = this.Elapsed.HasValue ? (int)this.Elapsed.Value.TotalMilliseconds : 0;
-                var result = await this.Session.Client.Send(parameters);
-                this.TimingSend = true;
-                return result;
+                throw new ObjectDisposedException(nameof(AnalyticsTiming));
             }
 
-            return new AnalyticsResult(new AnalyticsException(Resources.HasNotYetFinishedTiming));
+            if (!this.Finished.HasValue)
+            {
+                return new AnalyticsResult(new AnalyticsException(Resources.HasNotYetFinishedTiming));
+            }
+
+            if (this.TimingSend)
+            {
+                return new AnalyticsResult(new AnalyticsException(Resources.HasAlreadySentTiming));
+            }
+
+            var parameters = new TimingHitParameters(this.Parameters.Clone(), this.Parameters.UserTimingCategory, this.Parameters.UserTimingVariableName);
+            parameters.UserTimingTime = (int)this.Elapsed.Value.TotalMilliseconds;
+            var result = await this.Session.Client.Send(parameters);
+            this.TimingSend = true;
+            return result;
         }
 
         /// <summary>
-        /// Dispose; this finished the timer and directly sends the parameters.
+        /// Dispose; this finishes the timer (if this was not already done) and directly sends the parameters.
         /// </summary>
         public void Dispose()
         {
@@ -143,12 +150,26 @@ namespace Allium
         /// <param name="disposing">disposing</param>
         internal void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && !this.Disposed)
             {
-                if (!this.TimingFinished || !this.TimingSend)
+                try
                 {
-                    var sendTask = this.FinishAndSend();
-                    sendTask.Wait();
+                    // Finish and sent session, but do nothing otherwise (it might fail)
+                    if (!this.TimingSend)
+                    {
+                        var sendTask = this.FinishAndSend();
+                        sendTask.Wait();
+
+                        // Throw exception if sending fails.. (otherwise nobody would ever find out!)
+                        if (sendTask.Result != null && !sendTask.Result.Success)
+                        {
+                            throw sendTask.Result.Exception;
+                        }
+                    }
+                }
+                finally
+                {
+                    this.Disposed = true;
                 }
             }
         }

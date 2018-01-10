@@ -70,8 +70,6 @@ namespace Allium
 
             this.Client = client;
             this.Parameters = new GeneralParameters(trackingId);
-            this.SessionStarted = false;
-            this.SessionFinished = false;
         }
 
         /// <summary>
@@ -96,12 +94,22 @@ namespace Allium
         internal bool SessionFinished { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the timing was disposed.
+        /// </summary>
+        internal bool Disposed { get; private set; }
+
+        /// <summary>
         /// Start the current session.
         /// NOTE: Sends a message with <see cref="SessionControl.Start"/>.
         /// </summary>
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> Start()
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             if (!this.SessionStarted || this.SessionFinished)
             {
                 var parameters = this.Parameters.Clone();
@@ -124,6 +132,11 @@ namespace Allium
         /// <returns>Analytics Event</returns>
         public IAnalyticsEvent TrackEventHit(string category, string action)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             return new AnalyticsEvent(this, category, action);
         }
 
@@ -135,6 +148,11 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> TrackExceptionHit(Exception exception, bool? wasFatal)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             var parameters = new ExceptionHitParameters(this.Parameters.Clone(), exception, wasFatal);
             return await this.Client.Send(parameters);
         }
@@ -147,6 +165,11 @@ namespace Allium
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "Does not see it is fixed, bug?")]
         public async Task<IAnalyticsResult> TrackPageViewHit(string uri)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             return await this.TrackPageViewHit(new Uri(uri));
         }
 
@@ -157,6 +180,11 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> TrackPageViewHit(Uri url)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             var parameters = new PageViewHitParameters(this.Parameters.Clone(), url.ToString());
             return await this.Client.Send(parameters);
         }
@@ -169,6 +197,11 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> TrackPageViewHit(string hostName, string path)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             var parameters = new PageViewHitParameters(this.Parameters.Clone(), hostName, path);
             return await this.Client.Send(parameters);
         }
@@ -180,6 +213,11 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> TrackScreenViewHit(string screen)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             var parameters = new ScreenViewHitParameters(this.Parameters.Clone(), screen);
             return await this.Client.Send(parameters);
         }
@@ -193,6 +231,11 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> TrackSocialHit(string network, string action, string target)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             var parameters = new SocialHitParameters(this.Parameters.Clone(), network, action, target);
             return await this.Client.Send(parameters);
         }
@@ -205,6 +248,11 @@ namespace Allium
         /// <returns>Analytics Timing</returns>
         public IAnalyticsTiming TrackTimerHit(string category, string name)
         {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
             return new AnalyticsTiming(this, category, name);
         }
 
@@ -215,22 +263,30 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> Finish()
         {
-            if (this.SessionStarted && !this.SessionFinished)
+            if (this.Disposed)
             {
-                var parameters = this.Parameters.Clone();
-                parameters.Session.SessionControl = SessionControl.End;
-                var results = await this.Client.Send(parameters);
-                this.SessionFinished = results != null && results.Success;
-                this.SessionStarted = !this.SessionFinished;
-                return results;
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            // Can't finish a session we haven't started!
-            return new AnalyticsResult(new AnalyticsException(Resources.HasNotYetStartedSession));
+            if (!this.SessionStarted)
+            {
+                return new AnalyticsResult(new AnalyticsException(Resources.HasNotYetStartedSession));
+            }
+
+            if (this.SessionFinished)
+            {
+                return new AnalyticsResult(new AnalyticsException(Resources.HasAlreadyFinishedSession));
+            }
+
+            var parameters = this.Parameters.Clone();
+            parameters.Session.SessionControl = SessionControl.End;
+            var results = await this.Client.Send(parameters);
+            this.SessionFinished = results != null && results.Success;
+            return results;
         }
 
         /// <summary>
-        /// Dispose; this finished the session and directly sends the parameters.
+        /// Dispose; this finishes the session (if started) and directly sends the parameters.
         /// </summary>
         public void Dispose()
         {
@@ -244,10 +300,27 @@ namespace Allium
         /// <param name="disposing">disposing</param>
         internal void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && !this.Disposed)
             {
-                var sendTask = this.Finish();
-                sendTask?.Wait();
+                try
+                {
+                    // Finish any started session, but do nothing otherwise (it might fail)
+                    if (this.SessionStarted && !this.SessionFinished)
+                    {
+                        var sendTask = this.Finish();
+                        sendTask.Wait();
+
+                        // Throw exception if finishing fails.. (otherwise nobody would ever find out!)
+                        if (sendTask.Result != null && !sendTask.Result.Success)
+                        {
+                            throw sendTask.Result.Exception;
+                        }
+                    }
+                }
+                finally
+                {
+                    this.Disposed = true;
+                }
             }
         }
     }

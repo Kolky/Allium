@@ -81,6 +81,7 @@ namespace Allium.Parameters
                         parsedParameters.Add(
                             paramCollectionAttrib.ParameterName + counter.ToString(CultureInfo.InvariantCulture),
                             item.ToString());
+                        counter++;
                     }
                 }
 

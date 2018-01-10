@@ -33,10 +33,8 @@ namespace Allium.Tests
             Assert.That(client.UserAgent.StartsWith("Allium", StringComparison.Ordinal));
             Assert.NotNull(client.Factory);
 
-            var exception = Assert.Throws<AggregateException>(() => client.Send(null).Wait());
-            Assert.NotNull(exception.InnerException);
-            Assert.IsInstanceOf<ArgumentNullException>(exception.InnerException);
-            Assert.AreEqual("parameters", (exception.InnerException as ArgumentNullException).ParamName);
+            var exception = Assert.CatchAsync<ArgumentNullException>(() => client.Send(null));
+            Assert.AreEqual("parameters", exception.ParamName);
         }
 
         /// <summary>
@@ -51,7 +49,7 @@ namespace Allium.Tests
             Assert.That(client.UserAgent.StartsWith("Allium", StringComparison.Ordinal));
             Assert.IsNull(client.Factory);
 
-            var task = client.Send(new GeneralParameters("TrackingId"));
+            var task = client.Send(new GeneralParameters(AlliumConstants.TestTrackingId));
             task.Wait();
 
             Assert.NotNull(task.Result);
