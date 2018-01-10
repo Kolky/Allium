@@ -13,6 +13,7 @@ namespace Allium.Tests
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
     using System.Net;
     using Allium.Properties;
     using NUnit.Framework;
@@ -120,7 +121,7 @@ namespace Allium.Tests
 
                 // Catch dispose exception after trying to send after being disposed
                 var analyticsException = Assert.Throws<AnalyticsException>(() => timer.Dispose());
-                Assert.AreEqual(string.Format(Resources.InvalidResponse, HttpStatusCode.InternalServerError), analyticsException.Message);
+                Assert.AreEqual(string.Format(CultureInfo.InvariantCulture, Resources.InvalidResponse, HttpStatusCode.InternalServerError), analyticsException.Message);
             }
         }
 

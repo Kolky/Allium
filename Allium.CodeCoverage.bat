@@ -9,7 +9,7 @@ packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -target:packages\NUnit.Co
 rmdir /s /q %cover_dir%
 
 @echo Running ReportGenerator
-packages\ReportGenerator.2.5.10\tools\ReportGenerator.exe -reports:results.xml -targetdir:%cover_dir%
+packages\ReportGenerator.3.1.1\tools\ReportGenerator.exe -reports:results.xml -targetdir:%cover_dir%
 
 start "" %cover_dir%\index.htm
 del /q results.xml

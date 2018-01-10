@@ -15,6 +15,7 @@ namespace Allium.Tests
     using System.Net;
     using System.Threading.Tasks;
     using Rhino.Mocks;
+    using Validation;
 
     /// <summary>
     /// Extensions for <see cref="MockRepository"/>.
@@ -30,6 +31,8 @@ namespace Allium.Tests
         /// <returns>repository (to chain results)</returns>
         public static MockRepository ExpectWebRequest(this MockRepository repository, IWebRequestCreate factory, HttpStatusCode statusCode)
         {
+            Requires.NotNull(repository, nameof(repository));
+
             var requestHeaders = repository.PartialMock<WebHeaderCollection>();
             var request = repository.Stub<HttpWebRequest>();
             var response = repository.PartialMock<HttpWebResponse>();

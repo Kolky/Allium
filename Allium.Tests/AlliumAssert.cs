@@ -16,6 +16,7 @@ namespace Allium.Tests
     using Allium.Interfaces;
     using Allium.Interfaces.Parameters;
     using NUnit.Framework;
+    using Validation;
 
     /// <summary>
     /// Complex Asserts specific to Allium.
@@ -28,7 +29,7 @@ namespace Allium.Tests
         /// <param name="task">task</param>
         public static void Success(Task<IAnalyticsResult> task)
         {
-            Assert.NotNull(task);
+            Requires.NotNull(task, nameof(task));
             task.Wait();
 
             Assert.NotNull(task.Result);
@@ -43,7 +44,7 @@ namespace Allium.Tests
         /// <param name="message">message</param>
         public static void Failed(Task<IAnalyticsResult> task, string message)
         {
-            Assert.NotNull(task);
+            Requires.NotNull(task, nameof(task));
             task.Wait();
 
             Assert.NotNull(task.Result);
@@ -55,12 +56,12 @@ namespace Allium.Tests
         /// <summary>
         /// Assert default parameters.
         /// </summary>
-        /// <param name="parameters">parameters</param>
-        public static void Parameters(IGeneralParameters parameters)
+        /// <param name="generalParameters">parameters</param>
+        public static void Parameters(IGeneralParameters generalParameters)
         {
-            Assert.NotNull(parameters);
-            Assert.AreEqual(AlliumConstants.TestTrackingId, parameters.TrackingId);
-            Assert.AreEqual("1", parameters.ProtocolVersion);
+            Requires.NotNull(generalParameters, nameof(generalParameters));
+            Assert.AreEqual(AlliumConstants.TestTrackingId, generalParameters.TrackingId);
+            Assert.AreEqual("1", generalParameters.ProtocolVersion);
         }
     }
 }

@@ -360,6 +360,7 @@ namespace Allium.Tests
         /// </summary>
         [Test]
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times", Justification = "Required for this test!")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "Caused by double dispose statement!")]
         public void DisposeWithoutStartTest()
         {
             var repository = new MockRepository();
@@ -425,7 +426,7 @@ namespace Allium.Tests
                 AlliumAssert.Success(session.Start());
 
                 var analyticsException = Assert.Throws<AnalyticsException>(() => session.Dispose());
-                Assert.AreEqual(string.Format(Resources.InvalidResponse, HttpStatusCode.InternalServerError), analyticsException.Message);
+                Assert.AreEqual(string.Format(CultureInfo.InvariantCulture, Resources.InvalidResponse, HttpStatusCode.InternalServerError), analyticsException.Message);
             }
         }
 

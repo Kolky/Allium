@@ -11,6 +11,7 @@
 
 namespace Allium.Tests.Parameters
 {
+    using System.Diagnostics.CodeAnalysis;
     using Allium.Parameters;
     using NUnit.Framework;
 
@@ -24,6 +25,7 @@ namespace Allium.Tests.Parameters
         /// Test for method <see cref="GeneralParametersExtensions.ConvertParameters"/>.
         /// </summary>
         [Test]
+        [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "Redundant in Tests")]
         public void MoreThan200CustomDimensionsTest()
         {
             var parameters = new GeneralParameters(AlliumConstants.TestTrackingId);
