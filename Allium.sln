@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allium", "Allium\Allium.csproj", "{E2D5F38E-A68A-41EE-AAF1-AAA1F61A327B}"
 EndProject
@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allium.Example", "Allium.Example\Allium.Example.csproj", "{AE1445DD-79E9-4F8A-84E3-723649FD113A}"
+EndProject
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Allium.NuGet", "Allium.NuGet\Allium.NuGet.nuproj", "{9B5AB586-CE39-453A-8530-199A63332DAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,8 +38,15 @@ Global
 		{AE1445DD-79E9-4F8A-84E3-723649FD113A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE1445DD-79E9-4F8A-84E3-723649FD113A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE1445DD-79E9-4F8A-84E3-723649FD113A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B5AB586-CE39-453A-8530-199A63332DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B5AB586-CE39-453A-8530-199A63332DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B5AB586-CE39-453A-8530-199A63332DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B5AB586-CE39-453A-8530-199A63332DAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8A58337C-796C-491E-A3B4-D84E71349280}
 	EndGlobalSection
 EndGlobal
