@@ -92,7 +92,7 @@ namespace Allium
         {
             try
             {
-                var data = string.Concat(parameters.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+                var data = string.Join("&", parameters.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
                 var request = this.Factory.Create(new Uri($"invalid://host?{data}")) as HttpWebRequest;
                 request.UserAgent = this.UserAgent;
                 if (parameters.ContainsKey("DocumentReferrer"))

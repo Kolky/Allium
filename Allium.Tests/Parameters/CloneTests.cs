@@ -104,9 +104,13 @@ namespace Allium.Tests.Parameters
         [Test]
         public void UserParametersCloneTest()
         {
-            ICloneable parameters = new UserParameters();
-            Assert.NotNull(parameters);
-            Assert.AreNotSame(parameters, parameters.Clone());
+            ICloneable parameters1 = new UserParameters(Guid.NewGuid());
+            Assert.NotNull(parameters1);
+            Assert.AreNotSame(parameters1, parameters1.Clone());
+
+            ICloneable parameters2 = new UserParameters("UserId");
+            Assert.NotNull(parameters2);
+            Assert.AreNotSame(parameters2, parameters2.Clone());
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Allium.Tests
             var request = factory.Create(new Uri("invalid://host?data=true"));
             Assert.NotNull(request);
             Assert.NotNull(request.RequestUri);
-            Assert.AreEqual("https://ssl.google-analytics.com/debug/collect?data=true", request.RequestUri.ToString());
+            Assert.AreEqual("https://ssl.google-analytics.com/debug/collect", request.RequestUri.ToString());
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "Not needed for uri's.")]

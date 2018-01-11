@@ -14,6 +14,8 @@ namespace Allium
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Net;
+    using System.Text;
+    using Allium.Properties;
     using Validation;
 
     /// <summary>
@@ -59,12 +61,29 @@ namespace Allium
         /// </summary>
         /// <param name="uri">uri</param>
         /// <returns>The WebRequest that was created.</returns>
-        [SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Justification = "We don't want the full Uri.")]
         public WebRequest Create(Uri uri)
         {
             Requires.NotNull(uri, nameof(uri));
 
-            return WebRequest.Create(new Uri(this.BeaconUrl, uri.Query));
+            var data = uri.Query.TrimStart('?');
+            var body = Encoding.UTF8.GetBytes(data);
+            var request = WebRequest.Create(this.BeaconUrl) as HttpWebRequest;
+            if (request == null)
+            {
+                throw new WebException(Resources.RequestCreationFailed, WebExceptionStatus.UnknownError);
+            }
+
+            request.Method = "POST";
+            request.ContentLength = body.Length;
+            request.AllowWriteStreamBuffering = false;
+
+            // Fill body
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(body, 0, body.Length);
+            }
+
+            return request;
         }
     }
 }

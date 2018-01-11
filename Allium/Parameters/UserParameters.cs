@@ -24,8 +24,19 @@ namespace Allium.Parameters
         /// <summary>
         /// Initializes a new instance of the <see cref="UserParameters"/> class.
         /// </summary>
-        public UserParameters()
+        /// <param name="clientId">clientId</param>
+        public UserParameters(Guid clientId)
         {
+            this.ClientId = clientId;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserParameters"/> class.
+        /// </summary>
+        /// <param name="userId">userId</param>
+        public UserParameters(string userId)
+        {
+            this.UserId = userId;
         }
 
         /// <summary>

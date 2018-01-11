@@ -31,6 +31,33 @@ namespace Allium.Parameters
             Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
 
             this.TrackingId = trackingId;
+            this.User = new UserParameters(Guid.NewGuid());
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneralParameters"/> class.
+        /// </summary>
+        /// <param name="trackingId">trackingId</param>
+        /// <param name="clientId">clientId</param>
+        public GeneralParameters(string trackingId, Guid clientId)
+        {
+            Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
+
+            this.TrackingId = trackingId;
+            this.User = new UserParameters(clientId);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneralParameters"/> class.
+        /// </summary>
+        /// <param name="trackingId">trackingId</param>
+        /// <param name="userId">userId</param>
+        public GeneralParameters(string trackingId, string userId)
+        {
+            Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
+
+            this.TrackingId = trackingId;
+            this.User = new UserParameters(userId);
         }
 
         /// <summary>
@@ -100,7 +127,7 @@ namespace Allium.Parameters
         /// Gets the user parameters.
         /// </summary>
         [ContainsParameters]
-        public IUserParameters User { get; } = new UserParameters();
+        public IUserParameters User { get; private set; }
 
         /// <summary>
         /// Gets the session parameters.

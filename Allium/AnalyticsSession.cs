@@ -40,9 +40,51 @@ namespace Allium
         /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
         /// </summary>
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="clientId">The client Id to anonymously identity a user.</param>
+        public AnalyticsSession(string trackingId, Guid clientId)
+            : this(trackingId, clientId, true, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="userId">The user Id to identify a user.</param>
+        public AnalyticsSession(string trackingId, string userId)
+            : this(trackingId, userId, true, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
         public AnalyticsSession(string trackingId, bool useHttps)
             : this(trackingId, useHttps, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="clientId">The client Id to anonymously identity a user.</param>
+        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
+        public AnalyticsSession(string trackingId, Guid clientId, bool useHttps)
+            : this(trackingId, clientId, useHttps, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="userId">The user Id to identify a user.</param>
+        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
+        public AnalyticsSession(string trackingId, string userId, bool useHttps)
+            : this(trackingId, userId, useHttps, false)
         {
         }
 
@@ -61,6 +103,30 @@ namespace Allium
         /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
         /// </summary>
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="clientId">The client Id to anonymously identity a user.</param>
+        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
+        /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
+        public AnalyticsSession(string trackingId, Guid clientId, bool useHttps, bool sendToDebugServer)
+            : this(trackingId, clientId, new AnalyticsClient(useHttps, sendToDebugServer))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="userId">The user Id to identify a user.</param>
+        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
+        /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
+        public AnalyticsSession(string trackingId, string userId, bool useHttps, bool sendToDebugServer)
+            : this(trackingId, userId, new AnalyticsClient(useHttps, sendToDebugServer))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         /// <param name="client">Analytics client</param>
         internal AnalyticsSession(string trackingId, IAnalyticsClient client)
         {
@@ -70,6 +136,38 @@ namespace Allium
 
             this.Client = client;
             this.Parameters = new GeneralParameters(trackingId);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="clientId">The client Id to anonymously identity a user.</param>
+        /// <param name="client">Analytics client</param>
+        internal AnalyticsSession(string trackingId, Guid clientId, IAnalyticsClient client)
+        {
+            Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
+            Requires.Range(trackingId.StartsWith("UA", StringComparison.Ordinal), nameof(trackingId));
+            Requires.NotNull(client, nameof(client));
+
+            this.Client = client;
+            this.Parameters = new GeneralParameters(trackingId, clientId);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
+        /// </summary>
+        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
+        /// <param name="userId">The user Id to identify a user.</param>
+        /// <param name="client">Analytics client</param>
+        internal AnalyticsSession(string trackingId, string userId, IAnalyticsClient client)
+        {
+            Requires.NotNullOrWhiteSpace(trackingId, nameof(trackingId));
+            Requires.Range(trackingId.StartsWith("UA", StringComparison.Ordinal), nameof(trackingId));
+            Requires.NotNull(client, nameof(client));
+
+            this.Client = client;
+            this.Parameters = new GeneralParameters(trackingId, userId);
         }
 
         /// <summary>

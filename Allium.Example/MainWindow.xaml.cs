@@ -13,6 +13,8 @@ namespace Allium.Example
 {
     using System;
     using System.ComponentModel;
+    using System.Net;
+    using System.Net.NetworkInformation;
     using System.Runtime.CompilerServices;
     using System.Windows;
     using Interfaces;
@@ -33,6 +35,7 @@ namespace Allium.Example
         {
             this.UseHttps = true;
             this.DataContext = this;
+            this.Closed += (sender, e) => this.Session?.Dispose();
             this.InitializeComponent();
         }
 
@@ -101,6 +104,19 @@ namespace Allium.Example
             }
         }
 
+        private static string GetFqdn()
+        {
+            string domainName = IPGlobalProperties.GetIPGlobalProperties()?.DomainName;
+            string hostName = Dns.GetHostName();
+
+            if (!string.IsNullOrWhiteSpace(domainName) && !hostName.EndsWith(domainName, StringComparison.Ordinal))
+            {
+                return hostName + "." + domainName;
+            }
+
+            return hostName;
+        }
+
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "PropertyName")
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -110,7 +126,7 @@ namespace Allium.Example
         {
             if (!this.SessionCreated && !string.IsNullOrWhiteSpace(this.TrackingId))
             {
-                this.Session = new AnalyticsSession(this.TrackingId, this.UseHttps);
+                this.Session = new AnalyticsSession(this.TrackingId, GetFqdn(), this.UseHttps);
             }
         }
 
