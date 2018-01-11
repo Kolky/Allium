@@ -135,9 +135,6 @@
   <data name="InvalidResponse" xml:space="preserve">
     <value>Google Analytics Responded with {0}.</value>
   </data>
-  <data name="RequestCreationFailed" xml:space="preserve">
-    <value>Request creation failed!</value>
-  </data>
   <data name="RequestFailed" xml:space="preserve">
     <value>Request failed!</value>
   </data>

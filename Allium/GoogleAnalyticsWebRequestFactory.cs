@@ -14,8 +14,6 @@ namespace Allium
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Net;
-    using System.Text;
-    using Allium.Properties;
     using Validation;
 
     /// <summary>
@@ -65,25 +63,7 @@ namespace Allium
         {
             Requires.NotNull(uri, nameof(uri));
 
-            var data = uri.Query.TrimStart('?');
-            var body = Encoding.UTF8.GetBytes(data);
-            var request = WebRequest.Create(this.BeaconUrl) as HttpWebRequest;
-            if (request == null)
-            {
-                throw new WebException(Resources.RequestCreationFailed, WebExceptionStatus.UnknownError);
-            }
-
-            request.Method = "POST";
-            request.ContentLength = body.Length;
-            request.AllowWriteStreamBuffering = false;
-
-            // Fill body
-            using (var stream = request.GetRequestStream())
-            {
-                stream.Write(body, 0, body.Length);
-            }
-
-            return request;
+            return WebRequest.Create(this.BeaconUrl);
         }
     }
 }

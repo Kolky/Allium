@@ -11,7 +11,6 @@
 
 namespace Allium.Tests
 {
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Allium.Interfaces;
     using Allium.Interfaces.Parameters;

@@ -115,15 +115,6 @@ namespace Allium.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request creation failed!.
-        /// </summary>
-        internal static string RequestCreationFailed {
-            get {
-                return ResourceManager.GetString("RequestCreationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Request failed!.
         /// </summary>
         internal static string RequestFailed {

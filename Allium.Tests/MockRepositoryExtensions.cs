@@ -12,6 +12,7 @@
 namespace Allium.Tests
 {
     using System;
+    using System.IO;
     using System.Net;
     using System.Threading.Tasks;
     using Rhino.Mocks;
@@ -34,13 +35,15 @@ namespace Allium.Tests
             Requires.NotNull(repository, nameof(repository));
 
             var requestHeaders = repository.PartialMock<WebHeaderCollection>();
+            var stream = repository.PartialMock<MemoryStream>();
             var request = repository.Stub<HttpWebRequest>();
             var response = repository.PartialMock<HttpWebResponse>();
 
             // TODO: Expect parameters in URI!
             factory.Expect(x => x.Create(Arg<Uri>.Is.Anything)).Return(request).Repeat.Once();
             request.Headers = requestHeaders;
-            request.Expect(x => x.GetResponseAsync()).Return(Task.Run<WebResponse>(() => response)).Repeat.Once();
+            request.Expect(x => x.GetRequestStreamAsync()).Return(Task.FromResult<Stream>(stream)).Repeat.Any();
+            request.Expect(x => x.GetResponseAsync()).Return(Task.FromResult<WebResponse>(response)).Repeat.Once();
             response.Expect(x => x.StatusCode).Return(statusCode).Repeat.Any();
 
             return repository;

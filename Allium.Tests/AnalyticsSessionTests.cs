@@ -27,7 +27,7 @@ namespace Allium.Tests
     public class AnalyticsSessionTests
     {
         /// <summary>
-        /// Test for constructor <see cref="AnalyticsSession(string)"/>.
+        /// Test for constructor <see cref="AnalyticsSession(string)"/>, <see cref="AnalyticsSession(string, string)"/> and <see cref="AnalyticsSession(string, Guid)"/>.
         /// </summary>
         [Test]
         public void AnalyticsSessionTest()
@@ -36,10 +36,20 @@ namespace Allium.Tests
             {
                 this.AssertSession(session);
             }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User"))
+            {
+                this.AssertSession(session);
+            }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid()))
+            {
+                this.AssertSession(session);
+            }
         }
 
         /// <summary>
-        /// Test for constructor <see cref="AnalyticsSession(string, bool)"/>.
+        /// Test for constructor <see cref="AnalyticsSession(string, bool)"/>, <see cref="AnalyticsSession(string, string, bool)"/> and <see cref="AnalyticsSession(string, Guid, bool)"/>.
         /// </summary>
         [Test]
         public void AnalyticsSessionTest1()
@@ -53,10 +63,30 @@ namespace Allium.Tests
             {
                 this.AssertSession(session);
             }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: true)) // default for useHttps is true
+            {
+                this.AssertSession(session);
+            }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: false)) // default for useHttps is true
+            {
+                this.AssertSession(session);
+            }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: true)) // default for useHttps is true
+            {
+                this.AssertSession(session);
+            }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: false)) // default for useHttps is true
+            {
+                this.AssertSession(session);
+            }
         }
 
         /// <summary>
-        /// Test for constructor <see cref="AnalyticsSession(string, bool, bool)"/>
+        /// Test for constructor <see cref="AnalyticsSession(string, bool, bool)"/>, <see cref="AnalyticsSession(string, string, bool, bool)"/> and <see cref="AnalyticsSession(string, Guid, bool, bool)"/>.
         /// </summary>
         [Test]
         public void AnalyticsSessionTest2()
@@ -70,10 +100,30 @@ namespace Allium.Tests
             {
                 this.AssertSession(session);
             }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: false, sendToDebugServer: true)) // default for sendToDebugServer is false
+            {
+                this.AssertSession(session);
+            }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: false, sendToDebugServer: false)) // default for sendToDebugServer is false
+            {
+                this.AssertSession(session);
+            }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: false, sendToDebugServer: true)) // default for sendToDebugServer is false
+            {
+                this.AssertSession(session);
+            }
+
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: false, sendToDebugServer: false)) // default for sendToDebugServer is false
+            {
+                this.AssertSession(session);
+            }
         }
 
         /// <summary>
-        /// Test for constructor <see cref="AnalyticsSession(string, IAnalyticsClient)"/>.
+        /// Test for constructor <see cref="AnalyticsSession(string, IAnalyticsClient)"/>, <see cref="AnalyticsSession(string, string, IAnalyticsClient)"/> and <see cref="AnalyticsSession(string, Guid, IAnalyticsClient)"/>.
         /// </summary>
         [Test]
         public void AnalyticsSessionTest3()

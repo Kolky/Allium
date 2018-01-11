@@ -17,6 +17,7 @@ namespace Allium
     using System.Linq;
     using System.Net;
     using System.Reflection;
+    using System.Text;
     using System.Threading.Tasks;
     using Interfaces;
     using Interfaces.Parameters;
@@ -64,19 +65,20 @@ namespace Allium
         {
             Requires.NotNull(parameters, nameof(parameters));
 
-            HttpWebResponse response;
             try
             {
-                response = await this.ExecuteRequest(parameters.ConvertParameters());
-                if (response != null)
+                using (var response = await this.ExecuteRequest(parameters.ConvertParameters()))
                 {
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    if (response != null)
                     {
-                        return new AnalyticsResult(true);
-                    }
-                    else
-                    {
-                        return new AnalyticsResult(new AnalyticsException(string.Format(Resources.InvalidResponse, response.StatusCode)));
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            return new AnalyticsResult(true);
+                        }
+                        else
+                        {
+                            return new AnalyticsResult(new AnalyticsException(string.Format(Resources.InvalidResponse, response.StatusCode)));
+                        }
                     }
                 }
             }
@@ -92,12 +94,21 @@ namespace Allium
         {
             try
             {
-                var data = string.Join("&", parameters.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
-                var request = this.Factory.Create(new Uri($"invalid://host?{data}")) as HttpWebRequest;
-                request.UserAgent = this.UserAgent;
-                if (parameters.ContainsKey("DocumentReferrer"))
+                var request = this.Factory.Create(new Uri("invalid://host")) as HttpWebRequest;
+                if (request == null)
                 {
-                    request.Headers.Add(HttpRequestHeader.Referer, parameters["ReferralUrl"]);
+                    return null;
+                }
+
+                var data = string.Join("&", parameters.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+                var body = Encoding.UTF8.GetBytes(data);
+                request.UserAgent = this.UserAgent;
+                request.Method = "POST";
+                request.ContentLength = body.Length;
+
+                using (var stream = await request.GetRequestStreamAsync())
+                {
+                    await stream.WriteAsync(body, 0, body.Length);
                 }
 
                 return await request.GetResponseAsync() as HttpWebResponse;
