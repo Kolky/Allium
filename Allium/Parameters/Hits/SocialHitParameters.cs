@@ -41,14 +41,6 @@ namespace Allium.Parameters.Hits
             this.SocialActionTarget = target;
         }
 
-        private SocialHitParameters(SocialHitParameters copy)
-            : base(copy)
-        {
-            this.SocialNetwork = copy.SocialNetwork;
-            this.SocialAction = copy.SocialAction;
-            this.SocialActionTarget = copy.SocialActionTarget;
-        }
-
         /// <summary>
         /// Gets the type of hit.
         /// </summary>
@@ -74,14 +66,5 @@ namespace Allium.Parameters.Hits
         /// </summary>
         [Parameter("st", Required = true, MaxLength = 2048)]
         public string SocialActionTarget { get; set; }
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>Clone</returns>
-        public override IGeneralParameters Clone()
-        {
-            return new SocialHitParameters(this);
-        }
     }
 }

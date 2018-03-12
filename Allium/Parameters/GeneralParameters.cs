@@ -65,7 +65,7 @@ namespace Allium.Parameters
         /// Copy constructor.
         /// </summary>
         /// <param name="copy">copy</param>
-        protected GeneralParameters(IGeneralParameters copy)
+        public GeneralParameters(IGeneralParameters copy)
         {
             Requires.NotNull(copy, nameof(copy));
 
@@ -183,23 +183,5 @@ namespace Allium.Parameters
         /// </summary>
         [ParameterCollection("cm", StartIndex = 1, MaxItems = 200)]
         public IList<string> CustomMetrics { get; } = new List<string>();
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>Clone</returns>
-        public virtual IGeneralParameters Clone()
-        {
-            return new GeneralParameters(this);
-        }
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>Clone</returns>
-        object ICloneable.Clone()
-        {
-            return this.Clone();
-        }
     }
 }

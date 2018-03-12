@@ -12,7 +12,7 @@
 namespace Allium
 {
     using System.Threading.Tasks;
-    using Allium.Interfaces.Parameters;
+    using Allium.Interfaces.Parameters.Hits;
     using Interfaces;
     using Validation;
 
@@ -21,7 +21,7 @@ namespace Allium
     /// </summary>
     /// <typeparam name="T">Type of Hit Parameters.</typeparam>
     internal class AnalyticsHit<T> : IAnalyticsHit<T>
-        where T : IHitParameters
+        where T : ICloneableHitParameters<T>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalyticsHit{T}"/> class.

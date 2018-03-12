@@ -13,6 +13,7 @@ namespace Allium.Tests.Parameters
 {
     using System;
     using Allium.Parameters;
+    using Allium.Parameters.Hits;
     using NUnit.Framework;
 
     /// <summary>
@@ -50,17 +51,6 @@ namespace Allium.Tests.Parameters
         public void ContentInformationParametersCloneTest()
         {
             ICloneable parameters = new ContentInformationParameters();
-            Assert.NotNull(parameters);
-            Assert.AreNotSame(parameters, parameters.Clone());
-        }
-
-        /// <summary>
-        /// Test for <see cref="GeneralParameters.Clone"/>.
-        /// </summary>
-        [Test]
-        public void GeneralParametersCloneTest()
-        {
-            ICloneable parameters = new GeneralParameters("TrackingId");
             Assert.NotNull(parameters);
             Assert.AreNotSame(parameters, parameters.Clone());
         }
@@ -111,6 +101,28 @@ namespace Allium.Tests.Parameters
             ICloneable parameters2 = new UserParameters("UserId");
             Assert.NotNull(parameters2);
             Assert.AreNotSame(parameters2, parameters2.Clone());
+        }
+
+        /// <summary>
+        /// Test for <see cref="EnhancedEcommerceParameters.Clone"/>.
+        /// </summary>
+        [Test]
+        public void EnhancedEcommerceParametersCloneTest()
+        {
+            ICloneable parameters = new EnhancedEcommerceParameters();
+            Assert.NotNull(parameters);
+            Assert.AreNotSame(parameters, parameters.Clone());
+        }
+
+        /// <summary>
+        /// Test for <see cref="EnhancedEcommerceParameters.Clone"/>.
+        /// </summary>
+        [Test]
+        public void CloneableHitParametersCloneTest()
+        {
+            ICloneable parameters = new EventHitParameters(new GeneralParameters(AlliumConstants.TestTrackingId), "Category", "Action");
+            Assert.NotNull(parameters);
+            Assert.AreNotSame(parameters, parameters.Clone());
         }
     }
 }

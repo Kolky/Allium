@@ -20,7 +20,7 @@ namespace Allium.Parameters.Hits
     /// <summary>
     /// Parameters for an event hit.
     /// </summary>
-    internal class EventHitParameters : HitParameters, IEventParameters
+    internal class EventHitParameters : CloneableHitParameters<IEventParameters>, IEventParameters
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="EventHitParameters"/> class.
@@ -83,7 +83,7 @@ namespace Allium.Parameters.Hits
         /// Creates a new object that is a copy of the current instance.
         /// </summary>
         /// <returns>Clone</returns>
-        public override IGeneralParameters Clone()
+        public override IEventParameters Clone()
         {
             return new EventHitParameters(this);
         }

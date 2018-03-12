@@ -15,7 +15,6 @@ namespace Allium
     using System.Threading.Tasks;
     using Interfaces;
     using Interfaces.Parameters.Hits;
-    using Parameters.Hits;
     using Properties;
     using Validation;
 
@@ -28,14 +27,13 @@ namespace Allium
         /// Initializes a new instance of the <see cref="AnalyticsTiming"/> class.
         /// </summary>
         /// <param name="session">session</param>
-        /// <param name="category">category</param>
-        /// <param name="name">name</param>
-        public AnalyticsTiming(AnalyticsSession session, string category, string name)
+        /// <param name="parameters">parameters</param>
+        public AnalyticsTiming(AnalyticsSession session, ITimingParameters parameters)
         {
             Requires.NotNull(session, nameof(session));
 
             this.Session = session;
-            this.Parameters = new TimingHitParameters(this.Session.Parameters.Clone(), category, name);
+            this.Parameters = parameters;
             this.Started = DateTime.Now;
         }
 
@@ -128,7 +126,7 @@ namespace Allium
                 return new AnalyticsResult(new AnalyticsException(Resources.HasAlreadySentTiming));
             }
 
-            var parameters = new TimingHitParameters(this.Parameters.Clone(), this.Parameters.UserTimingCategory, this.Parameters.UserTimingVariableName);
+            var parameters = this.Parameters.Clone();
             parameters.UserTimingTime = (int)this.Elapsed.Value.TotalMilliseconds;
             var result = await this.Session.Client.Send(parameters);
             this.TimingSend = true;

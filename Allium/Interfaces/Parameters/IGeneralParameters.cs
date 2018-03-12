@@ -11,14 +11,13 @@
 
 namespace Allium.Interfaces.Parameters
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>
     /// Interface with general parameters.
     /// <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#general"/>
     /// </summary>
-    public interface IGeneralParameters : ICloneable<IGeneralParameters>
+    public interface IGeneralParameters
     {
         /// <summary>
         /// Gets the protocol version.

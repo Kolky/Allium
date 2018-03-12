@@ -11,6 +11,7 @@
 
 namespace Allium.Parameters.Hits
 {
+    using Allium.Interfaces.Parameters.Hits;
     using Attributes;
     using Enums;
     using Interfaces.Parameters;
@@ -28,17 +29,6 @@ namespace Allium.Parameters.Hits
         protected HitParameters(IGeneralParameters copy)
             : base(copy)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HitParameters"/> class.
-        /// Clone constructor!
-        /// </summary>
-        /// <param name="copy">copy</param>
-        protected HitParameters(IHitParameters copy)
-            : base(copy)
-        {
-            this.NonInteractionHit = copy.NonInteractionHit;
         }
 
         /// <summary>

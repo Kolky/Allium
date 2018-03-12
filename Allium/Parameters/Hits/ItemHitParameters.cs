@@ -19,7 +19,7 @@ namespace Allium.Parameters.Hits
     /// <summary>
     /// Parameters for an E-Commerce item hit
     /// </summary>
-    internal class ItemHitParameters : HitParameters, IEcommerceItemParameters
+    internal class ItemHitParameters : CloneableHitParameters<IEcommerceItemParameters>, IEcommerceItemParameters
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ItemHitParameters"/> class.
@@ -93,7 +93,7 @@ namespace Allium.Parameters.Hits
         /// Creates a new object that is a copy of the current instance.
         /// </summary>
         /// <returns>Clone</returns>
-        public override IGeneralParameters Clone()
+        public override IEcommerceItemParameters Clone()
         {
             return new ItemHitParameters(this);
         }

@@ -15,7 +15,7 @@ namespace Allium.Interfaces.Parameters.Hits
     /// Interface with E-Commerce parameters.
     /// <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ecomm"/>
     /// </summary>
-    public interface IEcommerceTransactionParameters : IEcommerceParameters
+    public interface IEcommerceTransactionParameters : IEcommerceParameters<IEcommerceTransactionParameters>
     {
         /// <summary>
         /// Gets or sets the transaction affiliation.

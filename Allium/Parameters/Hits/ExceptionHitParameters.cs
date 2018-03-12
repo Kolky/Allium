@@ -35,13 +35,6 @@ namespace Allium.Parameters.Hits
             this.IsExceptionFatal = wasFatal;
         }
 
-        private ExceptionHitParameters(ExceptionHitParameters copy)
-            : base(copy)
-        {
-            this.ExceptionDescription = copy.ExceptionDescription;
-            this.IsExceptionFatal = copy.IsExceptionFatal;
-        }
-
         /// <summary>
         /// Gets the type of hit.
         /// </summary>
@@ -61,14 +54,5 @@ namespace Allium.Parameters.Hits
         /// </summary>
         [Parameter("exf", DefaultValue = true)]
         public bool? IsExceptionFatal { get; set; }
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>Clone</returns>
-        public override IGeneralParameters Clone()
-        {
-            return new ExceptionHitParameters(this);
-        }
     }
 }

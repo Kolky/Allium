@@ -20,7 +20,7 @@ namespace Allium.Parameters.Hits
     /// <summary>
     /// Parameters for a timing hit.
     /// </summary>
-    internal class TimingHitParameters : HitParameters, ITimingParameters
+    internal class TimingHitParameters : CloneableHitParameters<ITimingParameters>, ITimingParameters
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TimingHitParameters"/> class.
@@ -138,7 +138,7 @@ namespace Allium.Parameters.Hits
         /// Creates a new object that is a copy of the current instance.
         /// </summary>
         /// <returns>Clone</returns>
-        public override IGeneralParameters Clone()
+        public override ITimingParameters Clone()
         {
             return new TimingHitParameters(this);
         }

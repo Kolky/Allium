@@ -35,12 +35,6 @@ namespace Allium.Parameters.Hits
             this.ScreenName = screen;
         }
 
-        private ScreenViewHitParameters(ScreenViewHitParameters copy)
-            : base(copy)
-        {
-            this.ScreenName = copy.ScreenName;
-        }
-
         /// <summary>
         /// Gets the type of hit.
         /// </summary>
@@ -54,14 +48,5 @@ namespace Allium.Parameters.Hits
         /// </summary>
         [Parameter("cd", Required = true, MaxLength = 2048)]
         public string ScreenName { get; set; }
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>Clone</returns>
-        public override IGeneralParameters Clone()
-        {
-            return new ScreenViewHitParameters(this);
-        }
     }
 }

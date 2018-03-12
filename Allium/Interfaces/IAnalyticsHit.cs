@@ -12,14 +12,14 @@
 namespace Allium.Interfaces
 {
     using System.Threading.Tasks;
-    using Allium.Interfaces.Parameters;
+    using Allium.Interfaces.Parameters.Hits;
 
     /// <summary>
     /// Interface for an Analytics Hit, to fill more parameters before sending.
     /// </summary>
     /// <typeparam name="T">Type of Hit Parameters</typeparam>
     public interface IAnalyticsHit<T>
-        where T : IHitParameters
+        where T : ICloneableHitParameters<T>
     {
         /// <summary>
         /// Gets the parameters.

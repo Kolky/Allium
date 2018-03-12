@@ -9,7 +9,7 @@
 // Licensed under the MS-PL license. See LICENSE.md file for full license information.
 // </copyright>
 
-namespace Allium.Interfaces.Parameters
+namespace Allium.Interfaces.Parameters.Hits
 {
     using Enums;
 

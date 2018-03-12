@@ -176,7 +176,7 @@ namespace Allium
 
             if (!this.SessionStarted || this.SessionFinished)
             {
-                var parameters = this.Parameters.Clone();
+                var parameters = new GeneralParameters(this.Parameters);
                 parameters.Session.SessionControl = SessionControl.Start;
                 var results = await this.Client.Send(parameters);
                 this.SessionStarted = results != null && results.Success;
@@ -201,7 +201,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            return new AnalyticsHit<IEventParameters>(this, new EventHitParameters(this.Parameters.Clone(), category, action));
+            return new AnalyticsHit<IEventParameters>(this, new EventHitParameters(this.Parameters, category, action));
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            var parameters = new ExceptionHitParameters(this.Parameters.Clone(), exception, wasFatal);
+            var parameters = new ExceptionHitParameters(this.Parameters, exception, wasFatal);
             return await this.Client.Send(parameters);
         }
 
@@ -249,7 +249,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            var parameters = new PageViewHitParameters(this.Parameters.Clone(), url.ToString());
+            var parameters = new PageViewHitParameters(this.Parameters, url.ToString());
             return await this.Client.Send(parameters);
         }
 
@@ -266,7 +266,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            var parameters = new PageViewHitParameters(this.Parameters.Clone(), hostName, path);
+            var parameters = new PageViewHitParameters(this.Parameters, hostName, path);
             return await this.Client.Send(parameters);
         }
 
@@ -282,7 +282,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            var parameters = new ScreenViewHitParameters(this.Parameters.Clone(), screen);
+            var parameters = new ScreenViewHitParameters(this.Parameters, screen);
             return await this.Client.Send(parameters);
         }
 
@@ -300,7 +300,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            var parameters = new SocialHitParameters(this.Parameters.Clone(), network, action, target);
+            var parameters = new SocialHitParameters(this.Parameters, network, action, target);
             return await this.Client.Send(parameters);
         }
 
@@ -316,7 +316,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            return new AnalyticsHit<IEcommerceTransactionParameters>(this, new TransactionHitParameters(this.Parameters.Clone(), transactionId));
+            return new AnalyticsHit<IEcommerceTransactionParameters>(this, new TransactionHitParameters(this.Parameters, transactionId));
         }
 
         /// <summary>
@@ -332,7 +332,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            return new AnalyticsHit<IEcommerceItemParameters>(this, new ItemHitParameters(this.Parameters.Clone(), transactionId, itemName));
+            return new AnalyticsHit<IEcommerceItemParameters>(this, new ItemHitParameters(this.Parameters, transactionId, itemName));
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace Allium
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            return new AnalyticsTiming(this, category, name);
+            return new AnalyticsTiming(this, new TimingHitParameters(this.Parameters, category, name));
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace Allium
                 return new AnalyticsResult(new AnalyticsException(Resources.HasAlreadyFinishedSession));
             }
 
-            var parameters = this.Parameters.Clone();
+            var parameters = new GeneralParameters(this.Parameters);
             parameters.Session.SessionControl = SessionControl.End;
             var results = await this.Client.Send(parameters);
             this.SessionFinished = results != null && results.Success;

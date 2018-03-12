@@ -1,4 +1,4 @@
-﻿// <copyright file="IEcommerceParameters.cs" company="Kolky">
+﻿// <copyright file="ICloneableGeneralParameters.cs" company="Kolky">
 //  __  __         __ __
 // |  |/  |.-----.|  |  |--.--.--.
 // |     ( |  _  ||  |    (|  |  |
@@ -9,18 +9,13 @@
 // Licensed under the MS-PL license. See LICENSE.md file for full license information.
 // </copyright>
 
-namespace Allium.Interfaces.Parameters.Hits
+namespace Allium.Interfaces.Parameters
 {
     /// <summary>
-    /// Interface with E-Commerce parameters.
-    /// <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ecomm"/>
+    /// Interface for cloneable version of general parameters.
     /// </summary>
     /// <typeparam name="T">Type of cloneable parameters.</typeparam>
-    public interface IEcommerceParameters<T> : ICloneableHitParameters<T>
+    public interface ICloneableGeneralParameters<T> : IGeneralParameters, ICloneable<T>
     {
-        /// <summary>
-        /// Gets the transaction id.
-        /// </summary>
-        string TransactionId { get; }
     }
 }

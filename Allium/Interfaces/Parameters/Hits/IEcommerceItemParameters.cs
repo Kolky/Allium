@@ -15,7 +15,7 @@ namespace Allium.Interfaces.Parameters.Hits
     /// Interface with E-Commerce parameters.
     /// <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#ecomm"/>
     /// </summary>
-    public interface IEcommerceItemParameters : IEcommerceParameters
+    public interface IEcommerceItemParameters : IEcommerceParameters<IEcommerceItemParameters>
     {
         /// <summary>
         /// Gets the item name.

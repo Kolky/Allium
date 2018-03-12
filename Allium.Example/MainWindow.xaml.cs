@@ -13,8 +13,6 @@ namespace Allium.Example
 {
     using System;
     using System.ComponentModel;
-    using System.Net;
-    using System.Net.NetworkInformation;
     using System.Runtime.CompilerServices;
     using System.Windows;
     using Interfaces;
@@ -25,7 +23,7 @@ namespace Allium.Example
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private string trackingId;
-        private bool useHttps;
+        private bool sendToDebugServer;
         private IAnalyticsSession session;
 
         /// <summary>
@@ -33,7 +31,7 @@ namespace Allium.Example
         /// </summary>
         public MainWindow()
         {
-            this.UseHttps = true;
+            this.SendToDebugServer = false;
             this.DataContext = this;
             this.Closed += (sender, e) => this.Session?.Dispose();
             this.InitializeComponent();
@@ -70,18 +68,18 @@ namespace Allium.Example
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to use https.
+        /// Gets or sets a value indicating whether to send to debug server.
         /// </summary>
-        public bool UseHttps
+        public bool SendToDebugServer
         {
             get
             {
-                return this.useHttps;
+                return this.sendToDebugServer;
             }
 
             set
             {
-                this.useHttps = value;
+                this.sendToDebugServer = value;
                 this.NotifyPropertyChanged();
             }
         }
@@ -104,19 +102,6 @@ namespace Allium.Example
             }
         }
 
-        private static string GetFqdn()
-        {
-            string domainName = IPGlobalProperties.GetIPGlobalProperties()?.DomainName;
-            string hostName = Dns.GetHostName();
-
-            if (!string.IsNullOrWhiteSpace(domainName) && !hostName.EndsWith(domainName, StringComparison.Ordinal))
-            {
-                return hostName + "." + domainName;
-            }
-
-            return hostName;
-        }
-
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "PropertyName")
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -126,7 +111,11 @@ namespace Allium.Example
         {
             if (!this.SessionCreated && !string.IsNullOrWhiteSpace(this.TrackingId))
             {
-                this.Session = new AnalyticsSession(this.TrackingId, GetFqdn(), this.UseHttps);
+                this.Session = new AnalyticsSession(this.TrackingId, this.SendToDebugServer);
+                this.Session.Parameters.App.ApplicationName = "Allium.Example";
+                this.Session.Parameters.App.ApplicationId = "com.kolky.Allium";
+
+                this.Session.Parameters.CustomDimensions.Add(Environment.MachineName);
             }
         }
 
@@ -140,9 +129,16 @@ namespace Allium.Example
 
         private async void OnEvent(object sender, RoutedEventArgs e)
         {
-            if (this.SessionCreated)
+            if (this.SessionCreated && this.Session != null)
             {
-                await this.Session?.TrackEventHit("Category", "Action").Send();
+                var hit = this.Session.TrackEventHit(this.EventCategory.Text, this.EventAction.Text);
+                hit.Parameters.EventLabel = this.EventLabel.Text;
+                if (int.TryParse(this.EventValue.Text, out int eventValue))
+                {
+                    hit.Parameters.EventValue = eventValue;
+                }
+
+                await hit.Send();
             }
         }
 
@@ -191,6 +187,8 @@ namespace Allium.Example
             if (this.SessionCreated)
             {
                 await this.Session?.Finish();
+
+                this.Session = null;
             }
         }
     }

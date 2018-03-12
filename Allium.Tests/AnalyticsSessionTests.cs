@@ -199,6 +199,61 @@ namespace Allium.Tests
         }
 
         /// <summary>
+        /// Test for method <see cref="AnalyticsSession.TrackTransactionHit(string)"/>.
+        /// </summary>
+        [Test]
+        public void TrackTransactionHitTest()
+        {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                repository.ExpectWebRequest(factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                var transactionHit = session.TrackTransactionHit("TransactionId");
+                Assert.NotNull(transactionHit);
+                Assert.NotNull(transactionHit.Parameters);
+                Assert.AreNotSame(session.Parameters, transactionHit.Parameters);
+                Assert.AreEqual("TransactionId", transactionHit.Parameters.TransactionId);
+
+                AlliumAssert.Success(transactionHit.Send());
+            }
+        }
+
+        /// <summary>
+        /// Test for method <see cref="AnalyticsSession.TrackItemHit(string, string)"/>.
+        /// </summary>
+        [Test]
+        public void TrackItemHitTest()
+        {
+            var repository = new MockRepository();
+            var factory = repository.StrictMock<IWebRequestCreate>();
+            using (repository.Record())
+            {
+                repository.ExpectWebRequest(factory, HttpStatusCode.OK);
+            }
+
+            using (repository.Playback())
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId))
+            {
+                session.Client.Factory = factory;
+                var itemHit = session.TrackItemHit("TransactionId", "ItemName");
+                Assert.NotNull(itemHit);
+                Assert.NotNull(itemHit.Parameters);
+                Assert.AreNotSame(session.Parameters, itemHit.Parameters);
+                Assert.AreEqual("TransactionId", itemHit.Parameters.TransactionId);
+                Assert.AreEqual("ItemName", itemHit.Parameters.ItemName);
+
+                AlliumAssert.Success(itemHit.Send());
+            }
+        }
+
+        /// <summary>
         /// Test for method <see cref="AnalyticsSession.TrackExceptionHit"/>.
         /// </summary>
         [Test]
@@ -515,6 +570,12 @@ namespace Allium.Tests
                 Assert.AreEqual(nameof(AnalyticsSession), sessionDisposedException.ObjectName);
 
                 sessionDisposedException = Assert.CatchAsync<ObjectDisposedException>(() => session.TrackSocialHit("Network", "Action", "Target"));
+                Assert.AreEqual(nameof(AnalyticsSession), sessionDisposedException.ObjectName);
+
+                sessionDisposedException = Assert.Throws<ObjectDisposedException>(() => session.TrackTransactionHit("TransactionId"));
+                Assert.AreEqual(nameof(AnalyticsSession), sessionDisposedException.ObjectName);
+
+                sessionDisposedException = Assert.Throws<ObjectDisposedException>(() => session.TrackItemHit("TransactionId", "ItemName"));
                 Assert.AreEqual(nameof(AnalyticsSession), sessionDisposedException.ObjectName);
 
                 sessionDisposedException = Assert.Throws<ObjectDisposedException>(() => session.TrackTimerHit("Category", "Name"));

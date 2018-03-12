@@ -73,7 +73,9 @@
     <Compile Include="Interfaces\Parameters\Hits\IExceptionParameters.cs" />
     <Compile Include="Interfaces\Parameters\Hits\IEcommerceTransactionParameters.cs" />
     <Compile Include="Interfaces\Parameters\IEnhancedEcommerceParameters.cs" />
-    <Compile Include="Interfaces\Parameters\IHitParameters.cs" />
+    <Compile Include="Interfaces\Parameters\ICloneableGeneralParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\ICloneableHitParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IHitParameters.cs" />
     <Compile Include="Interfaces\Parameters\IGeneralParameters.cs" />
     <Compile Include="Interfaces\Parameters\Hits\IPageViewParameters.cs" />
     <Compile Include="Interfaces\Parameters\Hits\IScreenViewParameters.cs" />
@@ -88,9 +90,10 @@
     <Compile Include="Parameters\AppTrackingParameters.cs" />
     <Compile Include="Parameters\ContentExperimentsParameters.cs" />
     <Compile Include="Parameters\ContentInformationParameters.cs" />
+    <Compile Include="Parameters\Hits\CloneableHitParameters.cs" />
     <Compile Include="Parameters\Hits\ItemHitParameters.cs" />
     <Compile Include="Parameters\Hits\TransactionHitParameters.cs" />
-    <Compile Include="Parameters\EnhancedECommerceParameters.cs" />
+    <Compile Include="Parameters\EnhancedEcommerceParameters.cs" />
     <Compile Include="Parameters\GeneralParametersExtensions.cs" />
     <Compile Include="Parameters\Hits\EventHitParameters.cs" />
     <Compile Include="Parameters\GeneralParameters.cs" />

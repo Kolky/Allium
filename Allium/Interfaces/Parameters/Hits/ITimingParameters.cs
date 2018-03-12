@@ -17,7 +17,7 @@ namespace Allium.Interfaces.Parameters.Hits
     /// Interface with the timing parameters. For the hit type: <see cref="HitType.Timing"/>.
     /// <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#timing"/>
     /// </summary>
-    public interface ITimingParameters : IHitParameters
+    public interface ITimingParameters : ICloneableHitParameters<ITimingParameters>
     {
         /// <summary>
         /// Gets or sets the user timing category.

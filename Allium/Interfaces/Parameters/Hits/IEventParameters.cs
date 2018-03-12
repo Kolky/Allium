@@ -17,7 +17,7 @@ namespace Allium.Interfaces.Parameters.Hits
     /// Interface with parameters for events. For the hit type: <see cref="HitType.Event"/>.
     /// <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#events"/>
     /// </summary>
-    public interface IEventParameters : IHitParameters
+    public interface IEventParameters : ICloneableHitParameters<IEventParameters>
     {
         /// <summary>
         /// Gets or sets the event category.
