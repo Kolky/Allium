@@ -133,7 +133,8 @@ namespace Allium.Example
             {
                 var hit = this.Session.TrackEventHit(this.EventCategory.Text, this.EventAction.Text);
                 hit.Parameters.EventLabel = this.EventLabel.Text;
-                if (int.TryParse(this.EventValue.Text, out int eventValue))
+                int eventValue;
+                if (int.TryParse(this.EventValue.Text, out eventValue))
                 {
                     hit.Parameters.EventValue = eventValue;
                 }
