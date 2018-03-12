@@ -28,7 +28,7 @@ namespace Allium.Tests
         [Test]
         public void SendParametersNullTest()
         {
-            var client = new AnalyticsClient(true, true);
+            var client = new AnalyticsClient(true);
             Assert.NotNull(client);
             Assert.That(client.UserAgent.StartsWith("Allium", StringComparison.Ordinal));
             Assert.NotNull(client.Factory);
@@ -43,7 +43,7 @@ namespace Allium.Tests
         [Test]
         public void SendInvalidResponseTest()
         {
-            var client = new AnalyticsClient(true, true);
+            var client = new AnalyticsClient(true);
             client.Factory = null;
             Assert.NotNull(client);
             Assert.That(client.UserAgent.StartsWith("Allium", StringComparison.Ordinal));

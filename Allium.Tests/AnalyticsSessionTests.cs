@@ -54,69 +54,54 @@ namespace Allium.Tests
         [Test]
         public void AnalyticsSessionTest1()
         {
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, useHttps: true)) // default for useHttps is true
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId)) // default for useHttps is true
             {
                 this.AssertSession(session);
             }
 
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, useHttps: false)) // default for useHttps is true
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User")) // default for useHttps is true
             {
                 this.AssertSession(session);
             }
 
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: true)) // default for useHttps is true
-            {
-                this.AssertSession(session);
-            }
-
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: false)) // default for useHttps is true
-            {
-                this.AssertSession(session);
-            }
-
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: true)) // default for useHttps is true
-            {
-                this.AssertSession(session);
-            }
-
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: false)) // default for useHttps is true
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid())) // default for useHttps is true
             {
                 this.AssertSession(session);
             }
         }
 
         /// <summary>
-        /// Test for constructor <see cref="AnalyticsSession(string, bool, bool)"/>, <see cref="AnalyticsSession(string, string, bool, bool)"/> and <see cref="AnalyticsSession(string, Guid, bool, bool)"/>.
+        /// Test for constructor <see cref="AnalyticsSession(string, bool)"/>, <see cref="AnalyticsSession(string, string, bool)"/> and <see cref="AnalyticsSession(string, Guid, bool)"/>.
         /// </summary>
         [Test]
         public void AnalyticsSessionTest2()
         {
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, useHttps: false, sendToDebugServer: true)) // default for sendToDebugServer is false
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, sendToDebugServer: true)) // default for sendToDebugServer is false
             {
                 this.AssertSession(session);
             }
 
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, useHttps: false, sendToDebugServer: false)) // default for sendToDebugServer is false
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, sendToDebugServer: false)) // default for sendToDebugServer is false
             {
                 this.AssertSession(session);
             }
 
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: false, sendToDebugServer: true)) // default for sendToDebugServer is false
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", sendToDebugServer: true)) // default for sendToDebugServer is false
             {
                 this.AssertSession(session);
             }
 
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", useHttps: false, sendToDebugServer: false)) // default for sendToDebugServer is false
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, "User", sendToDebugServer: false)) // default for sendToDebugServer is false
             {
                 this.AssertSession(session);
             }
 
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: false, sendToDebugServer: true)) // default for sendToDebugServer is false
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), sendToDebugServer: true)) // default for sendToDebugServer is false
             {
                 this.AssertSession(session);
             }
 
-            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), useHttps: false, sendToDebugServer: false)) // default for sendToDebugServer is false
+            using (var session = new AnalyticsSession(AlliumConstants.TestTrackingId, Guid.NewGuid(), sendToDebugServer: false)) // default for sendToDebugServer is false
             {
                 this.AssertSession(session);
             }

@@ -33,7 +33,7 @@ namespace Allium
         /// </summary>
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         public AnalyticsSession(string trackingId)
-            : this(trackingId, true, false)
+            : this(trackingId, false)
         {
         }
 
@@ -43,7 +43,7 @@ namespace Allium
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         /// <param name="clientId">The client Id to anonymously identity a user.</param>
         public AnalyticsSession(string trackingId, Guid clientId)
-            : this(trackingId, clientId, true, false)
+            : this(trackingId, clientId, false)
         {
         }
 
@@ -53,7 +53,7 @@ namespace Allium
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         /// <param name="userId">The user Id to identify a user.</param>
         public AnalyticsSession(string trackingId, string userId)
-            : this(trackingId, userId, true, false)
+            : this(trackingId, userId, false)
         {
         }
 
@@ -61,9 +61,9 @@ namespace Allium
         /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
         /// </summary>
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
-        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
-        public AnalyticsSession(string trackingId, bool useHttps)
-            : this(trackingId, useHttps, false)
+        /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
+        public AnalyticsSession(string trackingId, bool sendToDebugServer)
+            : this(trackingId, new AnalyticsClient(sendToDebugServer))
         {
         }
 
@@ -72,9 +72,9 @@ namespace Allium
         /// </summary>
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         /// <param name="clientId">The client Id to anonymously identity a user.</param>
-        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
-        public AnalyticsSession(string trackingId, Guid clientId, bool useHttps)
-            : this(trackingId, clientId, useHttps, false)
+        /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
+        public AnalyticsSession(string trackingId, Guid clientId, bool sendToDebugServer)
+            : this(trackingId, clientId, new AnalyticsClient(sendToDebugServer))
         {
         }
 
@@ -83,44 +83,9 @@ namespace Allium
         /// </summary>
         /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
         /// <param name="userId">The user Id to identify a user.</param>
-        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
-        public AnalyticsSession(string trackingId, string userId, bool useHttps)
-            : this(trackingId, userId, useHttps, false)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
-        /// </summary>
-        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
-        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
         /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
-        public AnalyticsSession(string trackingId, bool useHttps, bool sendToDebugServer)
-            : this(trackingId, new AnalyticsClient(useHttps, sendToDebugServer))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
-        /// </summary>
-        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
-        /// <param name="clientId">The client Id to anonymously identity a user.</param>
-        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
-        /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
-        public AnalyticsSession(string trackingId, Guid clientId, bool useHttps, bool sendToDebugServer)
-            : this(trackingId, clientId, new AnalyticsClient(useHttps, sendToDebugServer))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AnalyticsSession"/> class.
-        /// </summary>
-        /// <param name="trackingId">The tracking ID / web property ID. The format is UA-XXXX-Y.</param>
-        /// <param name="userId">The user Id to identify a user.</param>
-        /// <param name="useHttps">Whether to use https while sending analytics to google.</param>
-        /// <param name="sendToDebugServer">Whether to debug analytics calls by send them to the debug server.</param>
-        public AnalyticsSession(string trackingId, string userId, bool useHttps, bool sendToDebugServer)
-            : this(trackingId, userId, new AnalyticsClient(useHttps, sendToDebugServer))
+        public AnalyticsSession(string trackingId, string userId, bool sendToDebugServer)
+            : this(trackingId, userId, new AnalyticsClient(sendToDebugServer))
         {
         }
 

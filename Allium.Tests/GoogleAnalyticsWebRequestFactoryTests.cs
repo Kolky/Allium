@@ -28,10 +28,8 @@ namespace Allium.Tests
         [Test]
         public void GoogleAnalyticsWebRequestFactoryTest()
         {
-            this.TestFactory(new GoogleAnalyticsWebRequestFactory(true, true), true, true);
-            this.TestFactory(new GoogleAnalyticsWebRequestFactory(true, false), true, false);
-            this.TestFactory(new GoogleAnalyticsWebRequestFactory(false, true), false, true);
-            this.TestFactory(new GoogleAnalyticsWebRequestFactory(false, false), false, false);
+            this.TestFactory(new GoogleAnalyticsWebRequestFactory(true), true);
+            this.TestFactory(new GoogleAnalyticsWebRequestFactory(false), false);
         }
 
         /// <summary>
@@ -40,21 +38,19 @@ namespace Allium.Tests
         [Test]
         public void CreateTest()
         {
-            var factory = new GoogleAnalyticsWebRequestFactory(true, true);
+            var factory = new GoogleAnalyticsWebRequestFactory(true);
             var request = factory.Create(new Uri("invalid://host?data=true"));
             Assert.NotNull(request);
             Assert.NotNull(request.RequestUri);
-            Assert.AreEqual("https://ssl.google-analytics.com/debug/collect", request.RequestUri.ToString());
+            Assert.AreEqual("https://www.google-analytics.com/debug/collect", request.RequestUri.ToString());
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)", Justification = "Not needed for uri's.")]
-        private void TestFactory(GoogleAnalyticsWebRequestFactory factory, bool useHttps, bool sendToDebugServer)
+        private void TestFactory(GoogleAnalyticsWebRequestFactory factory, bool sendToDebugServer)
         {
             Assert.NotNull(factory);
             Assert.AreEqual(sendToDebugServer, factory.SendToDebugServer);
-            Assert.AreEqual(useHttps, factory.UseHttps);
-            var baseUrl = useHttps ? "https://ssl" : "http://www";
-            var testUrl = sendToDebugServer ? $"{baseUrl}.google-analytics.com/debug/collect" : $"{baseUrl}.google-analytics.com/collect";
+            var testUrl = $"https://www.google-analytics.com{(sendToDebugServer ? "/debug/" : "/")}collect";
             Assert.AreEqual(testUrl, factory.BeaconUrl.ToString());
         }
     }

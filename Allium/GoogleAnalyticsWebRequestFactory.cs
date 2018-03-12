@@ -24,18 +24,11 @@ namespace Allium
         /// <summary>
         /// Initializes a new instance of the <see cref="GoogleAnalyticsWebRequestFactory"/> class.
         /// </summary>
-        /// <param name="useHttps">useHttps</param>
         /// <param name="sendToDebugServer">sendToDebugServer</param>
-        public GoogleAnalyticsWebRequestFactory(bool useHttps, bool sendToDebugServer)
+        public GoogleAnalyticsWebRequestFactory(bool sendToDebugServer)
         {
-            this.UseHttps = useHttps;
             this.SendToDebugServer = sendToDebugServer;
         }
-
-        /// <summary>
-        /// Gets a value indicating whether we are using a secure connection.
-        /// </summary>
-        public bool UseHttps { get; }
 
         /// <summary>
         /// Gets a value indicating whether we are in debug mode.
@@ -50,7 +43,7 @@ namespace Allium
         {
             get
             {
-                return new Uri($"{(this.UseHttps ? "https" : "http")}://www.google-analytics.com/{(this.SendToDebugServer ? "debug/" : string.Empty)}collect");
+                return new Uri("https://www.google-analytics.com" + (this.SendToDebugServer ? "/debug/collect" : "/collect"));
             }
         }
 

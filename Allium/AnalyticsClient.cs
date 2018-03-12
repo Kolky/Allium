@@ -33,17 +33,16 @@ namespace Allium
         /// <summary>
         /// Initializes a new instance of the <see cref="AnalyticsClient"/> class.
         /// </summary>
-        /// <param name="useHttps">useHttps</param>
         /// <param name="sendToDebugServer">sendToDebugServer</param>
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])", Justification = "Not really useful here.")]
         [SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object,System.Object)", Justification = "Not really useful here.")]
-        public AnalyticsClient(bool useHttps, bool sendToDebugServer)
+        public AnalyticsClient(bool sendToDebugServer)
         {
             var assemblyName = Assembly.GetAssembly(typeof(AnalyticsClient)).GetName();
             var appVersion = $"{assemblyName.Version.Major}.{assemblyName.Version.Minor}.{assemblyName.Version.Revision}";
             var platformVersion = $"{Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}.{Environment.OSVersion.Version.Revision}";
             this.UserAgent = $"Allium/{appVersion} ({Environment.OSVersion.Platform}; {platformVersion}; {Environment.OSVersion.VersionString})";
-            this.Factory = new GoogleAnalyticsWebRequestFactory(useHttps, sendToDebugServer);
+            this.Factory = new GoogleAnalyticsWebRequestFactory(sendToDebugServer);
         }
 
         /// <summary>
