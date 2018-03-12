@@ -3,7 +3,7 @@ Google Analytics v3 Tracker in C#. Using the [Google Measurement Protocol](https
 
 ## Status
 [![Build status](https://ci.appveyor.com/api/projects/status/cdf6u2da6lrtqmwe?svg=true)](https://ci.appveyor.com/project/Kolky/allium)
-[![NuGet](https://badge.fury.io/nu/Allium.svg)](https://www.nuget.org/packages/Allium/1.0.0)
+[![NuGet](https://badge.fury.io/nu/Allium.svg)](https://www.nuget.org/packages/Allium)
 
 ## Example
 
