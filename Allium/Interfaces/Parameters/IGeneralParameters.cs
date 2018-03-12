@@ -76,14 +76,19 @@ namespace Allium.Interfaces.Parameters
         IContentInformationParameters ContentInformation { get; }
 
         /// <summary>
-        /// Gets the app parameters.
+        /// Gets the app tracking parameters.
         /// </summary>
         IAppTrackingParameters App { get; }
 
         /// <summary>
-        /// Gets the content experiments.
+        /// Gets the content experiments parameters.
         /// </summary>
         IContentExperimentsParameters ContentExperiments { get; }
+
+        /// <summary>
+        /// Gets the enhanced E-Commerce parameters.
+        /// </summary>
+        IEnhancedEcommerceParameters EnhancedEcommerce { get; }
 
         /// <summary>
         /// Gets a list of custom dimensions.

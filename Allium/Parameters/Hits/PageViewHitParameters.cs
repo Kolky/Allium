@@ -62,6 +62,14 @@ namespace Allium.Parameters.Hits
             this.DocumentPath = path;
         }
 
+        private PageViewHitParameters(PageViewHitParameters copy)
+            : base(copy)
+        {
+            this.DocumentLocationUrl = copy.DocumentLocationUrl;
+            this.DocumentHostName = copy.DocumentHostName;
+            this.DocumentPath = copy.DocumentPath;
+        }
+
         /// <summary>
         /// Gets the type of hit.
         /// </summary>
@@ -87,5 +95,14 @@ namespace Allium.Parameters.Hits
         /// </summary>
         [Parameter("dp", NecessarySet = nameof(PageViewHitParameters), MutuallyExclusiveSet = nameof(PageViewHitParameters))]
         public string DocumentPath { get; set; }
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>Clone</returns>
+        public override IGeneralParameters Clone()
+        {
+            return new PageViewHitParameters(this);
+        }
     }
 }

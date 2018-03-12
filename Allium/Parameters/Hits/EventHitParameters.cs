@@ -38,6 +38,15 @@ namespace Allium.Parameters.Hits
             this.EventAction = action;
         }
 
+        private EventHitParameters(EventHitParameters copy)
+            : base(copy)
+        {
+            this.EventCategory = copy.EventCategory;
+            this.EventAction = copy.EventAction;
+            this.EventLabel = copy.EventLabel;
+            this.EventValue = copy.EventValue;
+        }
+
         /// <summary>
         /// Gets the type of hit.
         /// </summary>
@@ -69,5 +78,14 @@ namespace Allium.Parameters.Hits
         /// </summary>
         [Parameter("ev")]
         public int EventValue { get; set; }
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>Clone</returns>
+        public override IGeneralParameters Clone()
+        {
+            return new EventHitParameters(this);
+        }
     }
 }

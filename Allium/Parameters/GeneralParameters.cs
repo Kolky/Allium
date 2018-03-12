@@ -82,6 +82,7 @@ namespace Allium.Parameters
             this.ContentInformation = copy.ContentInformation.Clone();
             this.App = copy.App.Clone();
             this.ContentExperiments = copy.ContentExperiments.Clone();
+            this.EnhancedEcommerce = copy.EnhancedEcommerce.Clone();
         }
 
         /// <summary>
@@ -154,16 +155,22 @@ namespace Allium.Parameters
         public IContentInformationParameters ContentInformation { get; } = new ContentInformationParameters();
 
         /// <summary>
-        /// Gets the app parameters.
+        /// Gets the app tracking parameters.
         /// </summary>
         [ContainsParameters]
         public IAppTrackingParameters App { get; } = new AppTrackingParameters();
 
         /// <summary>
-        /// Gets the content experiments.
+        /// Gets the content experiments parameters.
         /// </summary>
         [ContainsParameters]
         public IContentExperimentsParameters ContentExperiments { get; } = new ContentExperimentsParameters();
+
+        /// <summary>
+        /// Gets the enhanced E-Commerce parameters.
+        /// </summary>
+        [ContainsParameters]
+        public IEnhancedEcommerceParameters EnhancedEcommerce { get; } = new EnhancedEcommerceParameters();
 
         /// <summary>
         /// Gets a list of custom dimensions.
@@ -181,7 +188,7 @@ namespace Allium.Parameters
         /// Creates a new object that is a copy of the current instance.
         /// </summary>
         /// <returns>Clone</returns>
-        public IGeneralParameters Clone()
+        public virtual IGeneralParameters Clone()
         {
             return new GeneralParameters(this);
         }

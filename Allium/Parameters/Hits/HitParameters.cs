@@ -31,6 +31,17 @@ namespace Allium.Parameters.Hits
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="HitParameters"/> class.
+        /// Clone constructor!
+        /// </summary>
+        /// <param name="copy">copy</param>
+        protected HitParameters(IHitParameters copy)
+            : base(copy)
+        {
+            this.NonInteractionHit = copy.NonInteractionHit;
+        }
+
+        /// <summary>
         /// Gets the type of hit.
         /// </summary>
         [Parameter("t", Required = true)]

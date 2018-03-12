@@ -1,4 +1,4 @@
-﻿// <copyright file="AnalyticsEvent.cs" company="Kolky">
+﻿// <copyright file="AnalyticsHit.cs" company="Kolky">
 //  __  __         __ __
 // |  |/  |.-----.|  |  |--.--.--.
 // |     ( |  _  ||  |    (|  |  |
@@ -12,28 +12,28 @@
 namespace Allium
 {
     using System.Threading.Tasks;
+    using Allium.Interfaces.Parameters;
     using Interfaces;
-    using Interfaces.Parameters.Hits;
-    using Parameters.Hits;
     using Validation;
 
     /// <summary>
-    /// Analytics Event.
+    /// Analytics Hit, to fill more parameters before sending.
     /// </summary>
-    internal class AnalyticsEvent : IAnalyticsEvent
+    /// <typeparam name="T">Type of Hit Parameters.</typeparam>
+    internal class AnalyticsHit<T> : IAnalyticsHit<T>
+        where T : IHitParameters
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AnalyticsEvent"/> class.
+        /// Initializes a new instance of the <see cref="AnalyticsHit{T}"/> class.
         /// </summary>
         /// <param name="session">session</param>
-        /// <param name="category">category</param>
-        /// <param name="action">action</param>
-        public AnalyticsEvent(AnalyticsSession session, string category, string action)
+        /// <param name="parameters">parameters</param>
+        public AnalyticsHit(AnalyticsSession session, T parameters)
         {
             Requires.NotNull(session, nameof(session));
 
             this.Session = session;
-            this.Parameters = new EventHitParameters(session.Parameters.Clone(), category, action);
+            this.Parameters = parameters;
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Allium
         /// <summary>
         /// Gets the parameters.
         /// </summary>
-        public IEventParameters Parameters { get; private set; }
+        public T Parameters { get; private set; }
 
         /// <summary>
         /// Send the parameters.
@@ -52,8 +52,7 @@ namespace Allium
         /// <returns>Analytics Results</returns>
         public async Task<IAnalyticsResult> Send()
         {
-            var parameters = new EventHitParameters(this.Parameters.Clone(), this.Parameters.EventCategory, this.Parameters.EventAction);
-            return await this.Session.Client.Send(parameters);
+            return await this.Session.Client.Send(this.Parameters.Clone());
         }
     }
 }

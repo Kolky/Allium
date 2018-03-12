@@ -54,21 +54,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticsClient.cs" />
-    <Compile Include="AnalyticsEvent.cs" />
+    <Compile Include="AnalyticsHit.cs" />
     <Compile Include="AnalyticsException.cs" />
     <Compile Include="AnalyticsResult.cs" />
     <Compile Include="AnalyticsSession.cs" />
     <Compile Include="AnalyticsTiming.cs" />
     <Compile Include="Enums\HitType.cs" />
     <Compile Include="Enums\SessionControl.cs" />
-    <Compile Include="Interfaces\IAnalyticsEvent.cs" />
+    <Compile Include="Interfaces\IAnalyticsHit.cs" />
     <Compile Include="Interfaces\IAnalyticsResult.cs" />
     <Compile Include="Interfaces\ICloneable.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IEcommerceParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IEcommerceItemParameters.cs" />
     <Compile Include="Interfaces\Parameters\IAppTrackingParameters.cs" />
     <Compile Include="Interfaces\Parameters\IContentExperimentsParameters.cs" />
     <Compile Include="Interfaces\Parameters\IContentInformationParameters.cs" />
     <Compile Include="Interfaces\Parameters\Hits\IEventParameters.cs" />
     <Compile Include="Interfaces\Parameters\Hits\IExceptionParameters.cs" />
+    <Compile Include="Interfaces\Parameters\Hits\IEcommerceTransactionParameters.cs" />
+    <Compile Include="Interfaces\Parameters\IEnhancedEcommerceParameters.cs" />
     <Compile Include="Interfaces\Parameters\IHitParameters.cs" />
     <Compile Include="Interfaces\Parameters\IGeneralParameters.cs" />
     <Compile Include="Interfaces\Parameters\Hits\IPageViewParameters.cs" />
@@ -84,6 +88,9 @@
     <Compile Include="Parameters\AppTrackingParameters.cs" />
     <Compile Include="Parameters\ContentExperimentsParameters.cs" />
     <Compile Include="Parameters\ContentInformationParameters.cs" />
+    <Compile Include="Parameters\Hits\ItemHitParameters.cs" />
+    <Compile Include="Parameters\Hits\TransactionHitParameters.cs" />
+    <Compile Include="Parameters\EnhancedECommerceParameters.cs" />
     <Compile Include="Parameters\GeneralParametersExtensions.cs" />
     <Compile Include="Parameters\Hits\EventHitParameters.cs" />
     <Compile Include="Parameters\GeneralParameters.cs" />

@@ -50,7 +50,7 @@ namespace Allium
         {
             get
             {
-                return new Uri($"http{(this.UseHttps ? "s://ssl" : "://www")}.google-analytics.com/{(this.SendToDebugServer ? "debug/" : string.Empty)}collect");
+                return new Uri($"{(this.UseHttps ? "https" : "http")}://www.google-analytics.com/{(this.SendToDebugServer ? "debug/" : string.Empty)}collect");
             }
         }
 

@@ -38,6 +38,22 @@ namespace Allium.Parameters.Hits
             this.UserTimingVariableName = name;
         }
 
+        private TimingHitParameters(TimingHitParameters copy)
+            : base(copy)
+        {
+            this.UserTimingCategory = copy.UserTimingCategory;
+            this.UserTimingVariableName = copy.UserTimingVariableName;
+            this.UserTimingTime = copy.UserTimingTime;
+            this.UserTimingLabel = copy.UserTimingLabel;
+            this.PageLoadTime = copy.PageLoadTime;
+            this.DnsTime = copy.DnsTime;
+            this.PageDownloadTime = copy.PageDownloadTime;
+            this.RedirectResponseTime = copy.RedirectResponseTime;
+            this.TcpConnectTime = copy.TcpConnectTime;
+            this.DomInteractiveTime = copy.DomInteractiveTime;
+            this.ContentLoadTime = copy.ContentLoadTime;
+        }
+
         /// <summary>
         /// Gets the type of hit.
         /// </summary>
@@ -117,5 +133,14 @@ namespace Allium.Parameters.Hits
         /// </summary>
         [Parameter("clt")]
         public int ContentLoadTime { get; set; }
+
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>Clone</returns>
+        public override IGeneralParameters Clone()
+        {
+            return new TimingHitParameters(this);
+        }
     }
 }

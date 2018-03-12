@@ -11,12 +11,6 @@
 
 namespace Allium.Enums
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// The type of hit.
     /// <a href="https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters#t"/>

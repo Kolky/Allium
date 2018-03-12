@@ -13,11 +13,13 @@ namespace Allium.Interfaces
 {
     using System;
     using System.Threading.Tasks;
+    using Allium.Interfaces.Parameters.Hits;
     using Enums;
     using Parameters;
 
     /// <summary>
     /// Interface for a Analytics session.
+    /// NOTE: When disposing and a <see cref="SessionControl.Start"/> was sent, this will automatically send a <see cref="SessionControl.End"/>.
     /// </summary>
     public interface IAnalyticsSession : IDisposable
     {
@@ -40,7 +42,7 @@ namespace Allium.Interfaces
         /// <param name="category">category</param>
         /// <param name="action">action</param>
         /// <returns>Analytics Event</returns>
-        IAnalyticsEvent TrackEventHit(string category, string action);
+        IAnalyticsHit<IEventParameters> TrackEventHit(string category, string action);
 
         /// <summary>
         /// Track an Exception.
@@ -87,6 +89,21 @@ namespace Allium.Interfaces
         /// <param name="target">target</param>
         /// <returns>Analytics Results</returns>
         Task<IAnalyticsResult> TrackSocialHit(string network, string action, string target);
+
+        /// <summary>
+        /// Track a E-Commerce Transaction.
+        /// </summary>
+        /// <param name="transactionId">transactionId</param>
+        /// <returns>Analytics Results</returns>
+        IAnalyticsHit<IEcommerceTransactionParameters> TrackTransactionHit(string transactionId);
+
+        /// <summary>
+        /// Track a E-Commerce Item.
+        /// </summary>
+        /// <param name="transactionId">transactionId</param>
+        /// <param name="itemName">itemId</param>
+        /// <returns>Analytics Results</returns>
+        IAnalyticsHit<IEcommerceItemParameters> TrackItemHit(string transactionId, string itemName);
 
         /// <summary>
         /// Start a timer to track.

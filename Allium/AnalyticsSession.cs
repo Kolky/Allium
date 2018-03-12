@@ -14,6 +14,7 @@ namespace Allium
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
+    using Allium.Interfaces.Parameters.Hits;
     using Enums;
     using Interfaces;
     using Interfaces.Parameters;
@@ -228,14 +229,14 @@ namespace Allium
         /// <param name="category">category</param>
         /// <param name="action">action</param>
         /// <returns>Analytics Event</returns>
-        public IAnalyticsEvent TrackEventHit(string category, string action)
+        public IAnalyticsHit<IEventParameters> TrackEventHit(string category, string action)
         {
             if (this.Disposed)
             {
                 throw new ObjectDisposedException(nameof(AnalyticsSession));
             }
 
-            return new AnalyticsEvent(this, category, action);
+            return new AnalyticsHit<IEventParameters>(this, new EventHitParameters(this.Parameters.Clone(), category, action));
         }
 
         /// <summary>
@@ -336,6 +337,37 @@ namespace Allium
 
             var parameters = new SocialHitParameters(this.Parameters.Clone(), network, action, target);
             return await this.Client.Send(parameters);
+        }
+
+        /// <summary>
+        /// Track a E-Commerce Transaction.
+        /// </summary>
+        /// <param name="transactionId">transactionId</param>
+        /// <returns>Analytics Results</returns>
+        public IAnalyticsHit<IEcommerceTransactionParameters> TrackTransactionHit(string transactionId)
+        {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
+            return new AnalyticsHit<IEcommerceTransactionParameters>(this, new TransactionHitParameters(this.Parameters.Clone(), transactionId));
+        }
+
+        /// <summary>
+        /// Track a E-Commerce Item.
+        /// </summary>
+        /// <param name="transactionId">transactionId</param>
+        /// <param name="itemName">itemName</param>
+        /// <returns>Analytics Results</returns>
+        public IAnalyticsHit<IEcommerceItemParameters> TrackItemHit(string transactionId, string itemName)
+        {
+            if (this.Disposed)
+            {
+                throw new ObjectDisposedException(nameof(AnalyticsSession));
+            }
+
+            return new AnalyticsHit<IEcommerceItemParameters>(this, new ItemHitParameters(this.Parameters.Clone(), transactionId, itemName));
         }
 
         /// <summary>

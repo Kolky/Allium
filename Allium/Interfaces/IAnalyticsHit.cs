@@ -1,4 +1,4 @@
-﻿// <copyright file="IAnalyticsEvent.cs" company="Kolky">
+﻿// <copyright file="IAnalyticsHit.cs" company="Kolky">
 //  __  __         __ __
 // |  |/  |.-----.|  |  |--.--.--.
 // |     ( |  _  ||  |    (|  |  |
@@ -12,17 +12,19 @@
 namespace Allium.Interfaces
 {
     using System.Threading.Tasks;
-    using Parameters.Hits;
+    using Allium.Interfaces.Parameters;
 
     /// <summary>
-    /// Interface for an Analytics Event.
+    /// Interface for an Analytics Hit, to fill more parameters before sending.
     /// </summary>
-    public interface IAnalyticsEvent
+    /// <typeparam name="T">Type of Hit Parameters</typeparam>
+    public interface IAnalyticsHit<T>
+        where T : IHitParameters
     {
         /// <summary>
         /// Gets the parameters.
         /// </summary>
-        IEventParameters Parameters { get; }
+        T Parameters { get; }
 
         /// <summary>
         /// Send the parameters.
