@@ -18,13 +18,8 @@ namespace Allium.Interfaces
     /// <summary>
     /// Interface for a Google Analytics timing.
     /// </summary>
-    public interface IAnalyticsTiming : IDisposable
+    public interface IAnalyticsTiming : IAnalyticsHit<ITimingParameters>, IDisposable
     {
-        /// <summary>
-        /// Gets the parameters for this timing.
-        /// </summary>
-        ITimingParameters Parameters { get; }
-
         /// <summary>
         /// Gets the moment the timing was started.
         /// </summary>
@@ -51,11 +46,5 @@ namespace Allium.Interfaces
         /// </summary>
         /// <returns>Analytics Results</returns>
         Task<IAnalyticsResult> FinishAndSend();
-
-        /// <summary>
-        /// If the timing is finished, send the parameters.
-        /// </summary>
-        /// <returns>Analytics Results</returns>
-        Task<IAnalyticsResult> Send();
     }
 }
