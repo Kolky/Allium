@@ -55,7 +55,7 @@ namespace Allium.Tests
                     AlliumAssert.Success(timer.FinishAndSend());
                     Assert.NotNull(timer.Elapsed);
                     Assert.NotNull(timer.Finished);
-                    Assert.Greater(timer.Finished.Value, timer.Started);
+                    Assert.GreaterOrEqual(timer.Finished.Value, timer.Started);
 
                     // Test that we do not change the value when we call finish after the timer was already sent.
                     var previousFinish = timer.Finished;

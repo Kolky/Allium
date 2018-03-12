@@ -22,14 +22,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>Allium</Id>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Title>Allium</Title>
     <Authors>Alexander van der Kolk</Authors>
     <Owners>Alexander van der Kolk</Owners>
     <Summary>Allium</Summary>
     <Description>Allium</Description>
-    <ReleaseNotes>
-    </ReleaseNotes>
+    <ReleaseNotes>Added support for E-Commerce Tracking.</ReleaseNotes>
     <ProjectUrl>https://github.com/Kolky/Allium</ProjectUrl>
     <LicenseUrl>https://github.com/Kolky/Allium/blob/master/LICENSE.md</LicenseUrl>
     <Copyright>Copyright © Alexander van der Kolk 2017</Copyright>
