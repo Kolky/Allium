@@ -1,5 +1,5 @@
 # Allium
-Google Analytics v3 Tracker in C#
+Google Analytics v3 Tracker in C#. Using the [Google Measurement Protocol](https://developers.google.com/analytics/devguides/collection/protocol/v1/). Most of the Enhanced E-Commerce features are not (yet) supported.
 
 ## Status
 [![Build status](https://ci.appveyor.com/api/projects/status/cdf6u2da6lrtqmwe?svg=true)](https://ci.appveyor.com/project/Kolky/allium)
