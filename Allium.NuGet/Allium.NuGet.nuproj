@@ -22,13 +22,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>Allium</Id>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Title>Allium</Title>
     <Authors>Alexander van der Kolk</Authors>
     <Owners>Alexander van der Kolk</Owners>
     <Summary>Allium</Summary>
     <Description>Allium</Description>
-    <ReleaseNotes>Reduced parameter overhead.</ReleaseNotes>
+    <ReleaseNotes>Fixed bug in custom dimensions/metrics not being sent.</ReleaseNotes>
     <ProjectUrl>https://github.com/Kolky/Allium</ProjectUrl>
     <LicenseUrl>https://github.com/Kolky/Allium/blob/master/LICENSE.md</LicenseUrl>
     <Copyright>Copyright © Alexander van der Kolk 2017</Copyright>

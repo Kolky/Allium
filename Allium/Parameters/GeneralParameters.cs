@@ -83,6 +83,9 @@ namespace Allium.Parameters
             this.App = copy.App.Clone();
             this.ContentExperiments = copy.ContentExperiments.Clone();
             this.EnhancedEcommerce = copy.EnhancedEcommerce.Clone();
+
+            this.CustomDimensions = new List<string>(copy.CustomDimensions);
+            this.CustomMetrics = new List<string>(copy.CustomMetrics);
         }
 
         /// <summary>
