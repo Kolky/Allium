@@ -1,4 +1,4 @@
-﻿// <copyright file="IEcommerceTransactionParameters.cs" company="Kolky">
+﻿// <copyright file="IECommerceTransactionParameters.cs" company="Kolky">
 //  __  __         __ __
 // |  |/  |.-----.|  |  |--.--.--.
 // |     ( |  _  ||  |    (|  |  |
