@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Allium</id>
+    <version>1.2.3</version>
+    <title>Allium</title>
+    <authors>Alexander van der Kolk</authors>
+    <owners>Alexander van der Kolk</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/Kolky/Allium/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/Kolky/Allium</projectUrl>
+    <description>Allium</description>
+    <summary>Allium</summary>
+    <releaseNotes>Fixed bug in custom dimensions/metrics not being sent.</releaseNotes>
+    <copyright>Copyright © Alexander van der Kolk 2017</copyright>
+    <tags>Allium</tags>
+    <references>
+      <reference file="Allium.dll" />
+    </references>
+    <dependencies>
+      <dependency id="Validation" version="2.4.18" />
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- .NET 4.5.2 -->
+    <file src="Allium\bin\Release\Allium.dll" target="lib\net452" />
+    <file src="Allium\bin\Release\Allium.xml" target="lib\net452" />
+
+    <!-- .NET 4.6.2 -->
+    <file src="Allium.Net462\bin\Release\Allium.dll" target="lib\net462" />
+    <file src="Allium.Net462\bin\Release\Allium.xml" target="lib\net462" />
+
+    <!-- .NET Standard 2.0 -->
+    <file src="Allium.Standard\bin\Release\netstandard2.0\Allium.dll" target="lib\netstandard2.0" />
+    <file src="Allium.Standard\bin\Release\netstandard2.0\Allium.xml" target="lib\netstandard2.0" />
+  </files>
+</package>

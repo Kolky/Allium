@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{57FE360E-9A17-4962-8918-E17650AF7149}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Allium</RootNamespace>
+    <AssemblyName>Allium</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Allium.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Allium.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Validation, Version=2.4.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Validation.2.4.18\lib\net45\Validation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Allium\AnalyticsClient.cs">
+      <Link>AnalyticsClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\AnalyticsException.cs">
+      <Link>AnalyticsException.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\AnalyticsHit.cs">
+      <Link>AnalyticsHit.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\AnalyticsResult.cs">
+      <Link>AnalyticsResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\AnalyticsSession.cs">
+      <Link>AnalyticsSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\AnalyticsTiming.cs">
+      <Link>AnalyticsTiming.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Enums\HitType.cs">
+      <Link>Enums\HitType.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Enums\SessionControl.cs">
+      <Link>Enums\SessionControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\GoogleAnalyticsWebRequestFactory.cs">
+      <Link>GoogleAnalyticsWebRequestFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\IAnalyticsClient.cs">
+      <Link>Interfaces\IAnalyticsClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\IAnalyticsHit.cs">
+      <Link>Interfaces\IAnalyticsHit.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\IAnalyticsResult.cs">
+      <Link>Interfaces\IAnalyticsResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\IAnalyticsSession.cs">
+      <Link>Interfaces\IAnalyticsSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\IAnalyticsTiming.cs">
+      <Link>Interfaces\IAnalyticsTiming.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\ICloneable.cs">
+      <Link>Interfaces\ICloneable.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\ICloneableHitParameters.cs">
+      <Link>Interfaces\Parameters\Hits\ICloneableHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IEcommerceItemParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IEcommerceItemParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IEcommerceParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IEcommerceParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IEcommerceTransactionParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IEcommerceTransactionParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IEventParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IEventParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IExceptionParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IExceptionParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IHitParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IPageViewParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IPageViewParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\IScreenViewParameters.cs">
+      <Link>Interfaces\Parameters\Hits\IScreenViewParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\ISocialParameters.cs">
+      <Link>Interfaces\Parameters\Hits\ISocialParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\Hits\ITimingParameters.cs">
+      <Link>Interfaces\Parameters\Hits\ITimingParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\IAppTrackingParameters.cs">
+      <Link>Interfaces\Parameters\IAppTrackingParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\ICloneableGeneralParameters.cs">
+      <Link>Interfaces\Parameters\ICloneableGeneralParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\IContentExperimentsParameters.cs">
+      <Link>Interfaces\Parameters\IContentExperimentsParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\IContentInformationParameters.cs">
+      <Link>Interfaces\Parameters\IContentInformationParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\IEnhancedEcommerceParameters.cs">
+      <Link>Interfaces\Parameters\IEnhancedEcommerceParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\IGeneralParameters.cs">
+      <Link>Interfaces\Parameters\IGeneralParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\ISessionParameters.cs">
+      <Link>Interfaces\Parameters\ISessionParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\ISystemInfoParameters.cs">
+      <Link>Interfaces\Parameters\ISystemInfoParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\ITrafficSourcesParameters.cs">
+      <Link>Interfaces\Parameters\ITrafficSourcesParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Interfaces\Parameters\IUserParameters.cs">
+      <Link>Interfaces\Parameters\IUserParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\AppTrackingParameters.cs">
+      <Link>Parameters\AppTrackingParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Attributes\ContainsParametersAttribute.cs">
+      <Link>Parameters\Attributes\ContainsParametersAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Attributes\ParameterAttribute.cs">
+      <Link>Parameters\Attributes\ParameterAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Attributes\ParameterCollectionAttribute.cs">
+      <Link>Parameters\Attributes\ParameterCollectionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\ContentExperimentsParameters.cs">
+      <Link>Parameters\ContentExperimentsParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\ContentInformationParameters.cs">
+      <Link>Parameters\ContentInformationParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\EnhancedEcommerceParameters.cs">
+      <Link>Parameters\EnhancedEcommerceParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\GeneralParameters.cs">
+      <Link>Parameters\GeneralParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\GeneralParametersExtensions.cs">
+      <Link>Parameters\GeneralParametersExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\CloneableHitParameters.cs">
+      <Link>Parameters\Hits\CloneableHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\EventHitParameters.cs">
+      <Link>Parameters\Hits\EventHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\ExceptionHitParameters.cs">
+      <Link>Parameters\Hits\ExceptionHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\HitParameters.cs">
+      <Link>Parameters\Hits\HitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\ItemHitParameters.cs">
+      <Link>Parameters\Hits\ItemHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\PageViewHitParameters.cs">
+      <Link>Parameters\Hits\PageViewHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\ScreenViewHitParameters.cs">
+      <Link>Parameters\Hits\ScreenViewHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\SocialHitParameters.cs">
+      <Link>Parameters\Hits\SocialHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\TimingHitParameters.cs">
+      <Link>Parameters\Hits\TimingHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\Hits\TransactionHitParameters.cs">
+      <Link>Parameters\Hits\TransactionHitParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\SessionParameters.cs">
+      <Link>Parameters\SessionParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\SystemInfoParameters.cs">
+      <Link>Parameters\SystemInfoParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\TrafficSourcesParameters.cs">
+      <Link>Parameters\TrafficSourcesParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Parameters\UserParameters.cs">
+      <Link>Parameters\UserParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Allium\Properties\Resources.Designer.cs">
+      <Link>Properties\Resources.Designer.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Allium\Properties\Resources.resx">
+      <Link>Properties\Resources.resx</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -220,6 +220,7 @@ namespace Allium.Tests
                 Assert.NotNull(transactionHit.Parameters);
                 Assert.AreNotSame(session.Parameters, transactionHit.Parameters);
                 Assert.AreEqual("TransactionId", transactionHit.Parameters.TransactionId);
+                transactionHit.Parameters.CustomDimensions.Add("Test");
 
                 AlliumAssert.Success(transactionHit.Send());
             }

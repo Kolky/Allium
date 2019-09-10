@@ -1,4 +1,4 @@
-﻿// <copyright file="EnhancedECommerceParameters.cs" company="Kolky">
+﻿// <copyright file="EnhancedEcommerceParameters.cs" company="Kolky">
 //  __  __         __ __
 // |  |/  |.-----.|  |  |--.--.--.
 // |     ( |  _  ||  |    (|  |  |

@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{C3DA7A96-1530-49E2-9107-4BD8156B9DAD}"
 	ProjectSection(SolutionItems) = preProject
 		Allium.CodeCoverage.bat = Allium.CodeCoverage.bat
+		Allium.nuspec = Allium.nuspec
 		Allium.ruleset = Allium.ruleset
 		Allium.Tests.ruleset = Allium.Tests.ruleset
 		LICENSE.md = LICENSE.md
@@ -18,7 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allium.Example", "Allium.Example\Allium.Example.csproj", "{AE1445DD-79E9-4F8A-84E3-723649FD113A}"
 EndProject
-Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Allium.NuGet", "Allium.NuGet\Allium.NuGet.nuproj", "{9B5AB586-CE39-453A-8530-199A63332DAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Allium.Net462", "Allium.Net462\Allium.Net462.csproj", "{57FE360E-9A17-4962-8918-E17650AF7149}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Allium.Standard", "Allium.Standard\Allium.Standard.csproj", "{ACAC3A9E-C889-45E6-86B2-0FB7D0776A5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,8 +41,14 @@ Global
 		{AE1445DD-79E9-4F8A-84E3-723649FD113A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE1445DD-79E9-4F8A-84E3-723649FD113A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE1445DD-79E9-4F8A-84E3-723649FD113A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B5AB586-CE39-453A-8530-199A63332DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B5AB586-CE39-453A-8530-199A63332DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57FE360E-9A17-4962-8918-E17650AF7149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57FE360E-9A17-4962-8918-E17650AF7149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57FE360E-9A17-4962-8918-E17650AF7149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57FE360E-9A17-4962-8918-E17650AF7149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACAC3A9E-C889-45E6-86B2-0FB7D0776A5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACAC3A9E-C889-45E6-86B2-0FB7D0776A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACAC3A9E-C889-45E6-86B2-0FB7D0776A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACAC3A9E-C889-45E6-86B2-0FB7D0776A5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
